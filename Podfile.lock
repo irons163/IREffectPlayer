@@ -1,0 +1,35 @@
+PODS:
+  - GPUImage (0.1.7)
+  - IRFFMpeg (4.2.19):
+    - IRFFMpeg/FFMpegLib (= 4.2.19)
+  - IRFFMpeg/FFMpegLib (4.2.19)
+  - IRPlayer (0.3.5):
+    - IRFFMpeg
+
+DEPENDENCIES:
+  - GPUImage (from `https://github.com/BradLarson/GPUImage.git`, branch `master`)
+  - IRPlayer
+
+SPEC REPOS:
+  trunk:
+    - IRFFMpeg
+    - IRPlayer
+
+EXTERNAL SOURCES:
+  GPUImage:
+    :branch: master
+    :git: https://github.com/BradLarson/GPUImage.git
+
+CHECKOUT OPTIONS:
+  GPUImage:
+    :commit: 167b0389bc6e9dc4bb0121550f91d8d5d6412c53
+    :git: https://github.com/BradLarson/GPUImage.git
+
+SPEC CHECKSUMS:
+  GPUImage: bd7e201b9aa91e85f401ed7a6d9867a07a404693
+  IRFFMpeg: 50e159994f9c7c1136b19fc1dea96b4c903b1c9c
+  IRPlayer: 1448253d7c87c9cbdd7bd288d8a0edbdd17494a6
+
+PODFILE CHECKSUM: d73adf327a68d5e256b7a3ea3ba58e9d903e52f5
+
+COCOAPODS: 1.8.4

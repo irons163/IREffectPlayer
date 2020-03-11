@@ -7,5 +7,5 @@ target 'IREffectPlayer' do
 
   # Pods for IREffectPlayer
   pod 'IRPlayer'
-  pod 'GPUImage'
+  pod 'GPUImage', :git => 'https://github.com/BradLarson/GPUImage.git', branch: 'master'
 end

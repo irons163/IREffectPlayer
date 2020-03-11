@@ -1,0 +1,6 @@
+framework module Pods_IREffectPlayer {
+  umbrella header "Pods-IREffectPlayer-umbrella.h"
+
+  export *
+  module * { export * }
+}
