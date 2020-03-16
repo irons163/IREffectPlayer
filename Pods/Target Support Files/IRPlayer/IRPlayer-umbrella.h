@@ -63,6 +63,7 @@
 #import "IRGLProjectionEquirectangular.h"
 #import "IRGLProjectionOrthographic.h"
 #import "IRGLProjectionVR.h"
+#import "IRGLRender.h"
 #import "IRGLRenderBase.h"
 #import "IRGLRenderNV12.h"
 #import "IRGLRenderRGB.h"

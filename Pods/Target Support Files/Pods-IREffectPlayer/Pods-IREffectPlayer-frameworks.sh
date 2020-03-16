@@ -161,11 +161,13 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IRFFMpeg/IRFFMpeg.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IRPlayer/IRPlayer.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
+  install_framework "${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/GPUImage/GPUImage.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IRFFMpeg/IRFFMpeg.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/IRPlayer/IRPlayer.framework"

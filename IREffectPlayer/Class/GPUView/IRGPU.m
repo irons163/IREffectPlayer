@@ -8,6 +8,10 @@
 
 #import "IRGPU.h"
 #import <objc/runtime.h>
+#import <FLAnimatedImageView.h>
+#import <FLAnimatedImage.h>
+#import "GPUImageCropFilter.h"
+#import "GPUImageAlphaBlendFilter.h"
 
 @implementation IRGLView(AA)
 
@@ -23,6 +27,8 @@ static void *boundsSizeAtFrameBufferEpochKey = &boundsSizeAtFrameBufferEpochKey;
 static void *inputImageSizeKey = &inputImageSizeKey;
 static void *inputFramebufferForDisplayKey = &inputFramebufferForDisplayKey;
 static void *inputRotationKey = &inputRotationKey;
+static void *irOutputKey = &irOutputKey;
+static void *uiElementInputKey = &uiElementInputKey;
 static void *filterKey = &filterKey;
 static void *myfilterKey = &myfilterKey;
 static void *cropFilterKey = &cropFilterKey;
@@ -33,29 +39,70 @@ static void *outputKey = &outputKey;
 static void *enabledKey = &enabledKey;
 static void *scissorRectKey = &scissorRectKey;
 
-- (void)setupWith:(IROutput *)irOutput {
-    irOutput = [[IROutput alloc] init];
++ (void)swizzelWithDefaultSelector:(SEL)defaultSelector swizzledSelector:(SEL)swizzledSelector {
+    Class class = [self class];
+    Method defaultMethod = class_getInstanceMethod(class, defaultSelector);
+    Method swizzledMethod = class_getInstanceMethod(class, swizzledSelector);
+    
+    BOOL isMethodExists = !class_addMethod(class, defaultSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+    
+    if (isMethodExists) {
+        method_exchangeImplementations(defaultMethod, swizzledMethod);
+    }
+    else {
+        class_replaceMethod(class, swizzledSelector, method_getImplementation(defaultMethod), method_getTypeEncoding(defaultMethod));
+    }
+}
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        SEL defaultSelector = @selector(render:);
+        SEL swizzledSelector = @selector(swizzled_render:);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+    });
+}
+
+#pragma mark - Method Swizzling
+- (void)swizzled_render:(IRFFVideoFrame *)frame {
+    if (CGSizeEqualToSize(CGSizeZero, [self.irOutput viewprotRange].size)) {
+        return;
+    }
+    
+    GPUImageFramebuffer *outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self.irOutput viewprotRange].size onlyTexture:NO];
+    [self.irOutput setOutputFramebuffer:outputFramebuffer];
+    [outputFramebuffer activateFramebuffer];
+    
+    [self swizzled_render:frame];
+    
+    [self.irOutput processProgram];
+    
+    NSLog(@"Render: %@",frame);
+}
+
+- (void)setup {
+    self.irOutput = [[IROutput alloc] init];
     [self commonInit];
 }
 
 //- (void)setRenderModes:(NSArray<IRGLRenderMode *> *)modes {
 - (void)updateSize {
-    [super initModes];
     GLint           _width;
     GLint           _height;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
-    irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
+    self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
     
     
-    if (_temp) {
-        [_temp setFrame:irOutput.viewprotRange];
+    if (self.temp) {
+        [self.temp setFrame:self.irOutput.viewprotRange];
         return;
     }
     
     NSDate *startTime = [NSDate date];
     
-    _temp = [[WorkView alloc] initWithFrame:irOutput.viewprotRange];
+    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -64,10 +111,24 @@ static void *scissorRectKey = &scissorRectKey;
     timeLabel.textColor = [UIColor whiteColor];
     [timeLabel sizeToFit];
     //        [timeLabel setHidden:YES];
-    [_temp addSubview:timeLabel];
+    [self.temp addSubview:timeLabel];
     
-    myfilter = [[GPUImageFilter alloc] init];
-    filter = [[GPUImageFilter alloc] init];
+    self.cropFilter = [[GPUImageCropFilter alloc] init];
+    self.cropFilter.cropRegion = CGRectMake(0, 0, 0.5f, 0.5f);
+    [self.cropFilter setInputRotation:kGPUImageNoRotation atIndex:0];
+    //    [cropFilter forceProcessingAtSizeRespectingAspectRatio:previewFrame.size];
+    //        [cropFilter addTarget:i];
+    
+    //    [cropFilter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
+    //         runSynchronouslyOnVideoProcessingQueue(^{
+    //        [[filter framebufferForOutput] lock];
+    //        [((id<VCSessionFrameDelegate>)session) callback:[[filter framebufferForOutput] pixelBuffer] durr:50];
+    //        [[filter framebufferForOutput] unlock];
+    //             });
+    //    }];
+    
+    self.myfilter = [[GPUImageFilter alloc] init];
+    self.filter = [[GPUImageFilter alloc] init];
     GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
     blendFilter.mix = 1.0;
     
@@ -76,7 +137,7 @@ static void *scissorRectKey = &scissorRectKey;
     UIImageView *imageView= [[UIImageView alloc] initWithFrame:CGRectMake(100.0, 100.0, 40.0f, 40.0f)];
     imageView.image = [UIImage imageNamed:@"Icon"];
     imageView.backgroundColor = [UIColor clearColor];
-    [_temp addSubview:imageView];
+    [self.temp addSubview:imageView];
     
     //        UIWebView *webView= [[UIWebView alloc] initWithFrame:CGRectMake(200.0, 200.0, 240.0f, 100.0f)];
     ////        webView.image = [UIImage imageNamed:@"Icon"];
@@ -111,7 +172,7 @@ static void *scissorRectKey = &scissorRectKey;
     [gifImageView setAnimatedImage:animatedImage];
     gifImageView.backgroundColor = [UIColor clearColor];
     //            [self addSubview:gifImageView];
-    [_temp addSubview:gifImageView];
+    [self.temp addSubview:gifImageView];
     //            [self addSubview:temp];
     //            temp.hidden = YES;
     //            [gifImageView animationRepeatCount];
@@ -138,85 +199,69 @@ static void *scissorRectKey = &scissorRectKey;
     animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
     [gifImageView2 setAnimatedImage:animatedImage];
     gifImageView2.backgroundColor = [UIColor clearColor];
-    [_temp addSubview:gifImageView2];
+    [self.temp addSubview:gifImageView2];
     [gifImageView2 startAnimating];
     
-    uiElementInput = [[GPUImageUIElement alloc] initWithView:_temp];
-    [filter addTarget:blendFilter atTextureLocation:0];
+    self.uiElementInput = [[GPUImageUIElement alloc] initWithView:self.temp];
+    [self.filter addTarget:blendFilter atTextureLocation:0];
     //        [filter addTarget:self];
-    [uiElementInput addTarget:blendFilter atTextureLocation:1];
+    [self.uiElementInput addTarget:blendFilter atTextureLocation:1];
     
     [blendFilter addTarget:self];
     
-    myfilter = blendFilter;
+    self.myfilter = blendFilter;
     
-    __unsafe_unretained GPUImageUIElement *weakUIElementInput = uiElementInput;
+    __unsafe_unretained GPUImageUIElement *weakUIElementInput = self.uiElementInput;
     
-    [filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
-        timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
-        [timeLabel sizeToFit];
+    [self.filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
+//        timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
+//        [timeLabel sizeToFit];
         
-        // 与上一帧的间隔
+//        // 与上一帧的间隔
+//        NSTimeInterval interval = 0;
+//        //            if (CMTIME_IS_VALID(_lastTime)) {
+//        //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
+//        //            }
+//        _currentTime = [[NSDate date] timeIntervalSince1970];
+//        if(_lastTime != 0){
+//            interval = _currentTime - _lastTime;
+//        }
+//        _lastTime = _currentTime;
+        
         NSTimeInterval interval = 0;
-        //            if (CMTIME_IS_VALID(_lastTime)) {
-        //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
-        //            }
-        _currentTime = [[NSDate date] timeIntervalSince1970];
-        if(_lastTime != 0){
-            interval = _currentTime - _lastTime;
-        }
-        _lastTime = _currentTime;
         
         [gifImageView nextFrameIndexForInterval:interval];
         [gifImageView2 nextFrameIndexForInterval:interval];
         [weakUIElementInput update];
     }];
     
-    cropFilter = [[GPUImageCropFilter alloc] init];
-    cropFilter.cropRegion = CGRectMake(0, 0, 0.5f, 0.5f);
-    [cropFilter setInputRotation:kGPUImageNoRotation atIndex:0];
-    //    [cropFilter forceProcessingAtSizeRespectingAspectRatio:previewFrame.size];
-    //        [cropFilter addTarget:i];
     
-    //    [cropFilter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
-    //         runSynchronouslyOnVideoProcessingQueue(^{
-    //        [[filter framebufferForOutput] lock];
-    //        [((id<VCSessionFrameDelegate>)session) callback:[[filter framebufferForOutput] pixelBuffer] durr:50];
-    //        [[filter framebufferForOutput] unlock];
-    //             });
-    //    }];
     
-    [[self getFilter] addTarget:cropFilter];
+    [self.filter addTarget:self.cropFilter];
     
-    [filter setInputRotation:kGPUImageNoRotation atIndex:0];
-    [irOutput addTarget:filter];
+    [self.filter setInputRotation:kGPUImageNoRotation atIndex:0];
+    [self.irOutput addTarget:self.filter];
 }
 
-- (void)layoutSubviews {
-    [super layoutSubviews];
-    
-    GLint           _width;
-    GLint           _height;
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
-    irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
-}
-
-- (void)render:(IRFFVideoFrame *)frame {
-//    [GPUImageContext useImageProcessingContext];
+//- (void)layoutSubviews {
+//    [super layoutSubviews];
 //
-    if (CGSizeEqualToSize(CGSizeZero, [irOutput viewprotRange].size)) {
-        return;
-    }
-    
-    GPUImageFramebuffer *outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[irOutput viewprotRange].size onlyTexture:NO];
-    [irOutput setOutputFramebuffer:outputFramebuffer];
-    [outputFramebuffer activateFramebuffer];
-    
-    [super render:frame];
-    
-    [irOutput processProgram];
-}
+//    GLint           _width;
+//    GLint           _height;
+//    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
+//    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
+//    irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
+//}
+
+//- (void)render:(IRFFVideoFrame *)frame {
+////    [GPUImageContext useImageProcessingContext];
+////
+//
+//
+//    [super render:frame];
+//
+//
+//}
 
 - (void)commonInit;
 {
@@ -603,7 +648,23 @@ static void *scissorRectKey = &scissorRectKey;
     return [objc_getAssociatedObject(self, &inputRotationKey) unsignedIntegerValue  ];
 }
 
--(GPUImageFilter*)getFilter{
+- (IROutput *)irOutput {
+    return objc_getAssociatedObject(self, &irOutputKey);
+}
+
+- (void)setIrOutput:(IROutput *)irOutput {
+    objc_setAssociatedObject(self, &irOutputKey, irOutput, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (GPUImageUIElement *)uiElementInput {
+    return objc_getAssociatedObject(self, &uiElementInputKey);
+}
+
+-(void)setUiElementInput:(GPUImageUIElement *)uiElementInput {
+    objc_setAssociatedObject(self, &uiElementInputKey, uiElementInput, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (GPUImageFilter *)filter {
     return objc_getAssociatedObject(self, &filterKey);
 }
 

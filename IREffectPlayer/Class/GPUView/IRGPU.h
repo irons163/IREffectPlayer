@@ -12,7 +12,7 @@
 #import "WorkView.h"
 #import "StickerView.h"
 #import "GPUImageContext.h"
-
+#import "GPUImageUIElement.h"
 #import "GPUImageFilter.h"
 #import "GPUImageCropFilter.h"
 #import "IROutput.h"
@@ -42,7 +42,11 @@
 @property (strong, nonatomic) GPUImageFilter *filter, *myfilter;
 @property (strong, nonatomic) GPUImageCropFilter *cropFilter;
 
+@property (strong, nonatomic) IROutput *irOutput;
+@property (strong, nonatomic) GPUImageUIElement* uiElementInput;
 
+- (void)setup;
+- (void)updateSize;
 - (void)updateStickViews:(NSArray<StickerView*>*)stickViews;
 
 //- (GPUImageFilter*)getFilter;

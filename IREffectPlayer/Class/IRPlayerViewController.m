@@ -62,6 +62,8 @@
     self.player.decoder = [IRPlayerDecoder FFmpegDecoder];
     [self.player replaceVideoWithURL:normalVideo];
     [self.mainView insertSubview:self.player.view atIndex:0];
+    
+    [(IRGLView *)self.player.view setup];
 }
 
 - (void)viewDidLayoutSubviews
@@ -69,6 +71,7 @@
     [super viewDidLayoutSubviews];
 //    self.player.view.frame = self.view.bounds;
     [self.player updateGraphicsViewFrame:self.view.bounds];
+    [(IRGLView *)self.player.view updateSize];
 }
 
 - (void)dealWithNotification:(NSNotification *)notification Player:(IRPlayerImp *)player {
