@@ -261,7 +261,7 @@ void dataProviderUnlockCallback (void *info, const void *data, size_t size);
 
 - (void)unlock;
 {
-    if (referenceCountingDisabled)
+    if (referenceCountingDisabled || framebufferReferenceCount <= 0)
     {
         return;
     }

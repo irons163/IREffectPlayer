@@ -26,6 +26,7 @@
 @property (strong, nonatomic) WorkView *temp;
 @property (strong, nonatomic) IRGLView* output;
 @property(nonatomic) BOOL enabled;
+@property(nonatomic) BOOL isRendering;
 @property (nonatomic) CGRect scissorRect;
 
 @property (strong, nonatomic) GLProgram *displayProgram;
@@ -54,8 +55,10 @@
 //- (void)setOutput:(GPUImageView *)output;
 
 - (void)setCurrentContext;
+- (void)bindCurrentFramebuffer;
 - (BOOL)clearCurrentBuffer;
 - (void)bindCurrentRenderBuffer;
 - (BOOL)presentRenderBuffer;
+- (void)runSyncInQueue:(void (^)(void))block;
 
 @end

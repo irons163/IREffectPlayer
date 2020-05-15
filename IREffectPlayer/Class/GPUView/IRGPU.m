@@ -12,6 +12,7 @@
 #import <FLAnimatedImage.h>
 #import "GPUImageCropFilter.h"
 #import "GPUImageAlphaBlendFilter.h"
+#import "GPUImageNormalBlendFilter.h"
 
 @implementation IRGLView(AA)
 
@@ -37,6 +38,7 @@ static void *VCSessionFrameDelegateKey = &VCSessionFrameDelegateKey;
 static void *tempKey = &tempKey;
 static void *outputKey = &outputKey;
 static void *enabledKey = &enabledKey;
+static void *isRenderingKey = &isRenderingKey;
 static void *scissorRectKey = &scissorRectKey;
 
 + (void)swizzelWithDefaultSelector:(SEL)defaultSelector swizzledSelector:(SEL)swizzledSelector {
@@ -61,24 +63,93 @@ static void *scissorRectKey = &scissorRectKey;
         SEL swizzledSelector = @selector(swizzled_render:);
         
         [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(layoutSubviews);
+        swizzledSelector = @selector(swizzled_layoutSubviews);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(setCurrentContext);
+        swizzledSelector = @selector(swizzled_setCurrentContext);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(bindCurrentFramebuffer);
+        swizzledSelector = @selector(swizzled_bindCurrentFramebuffer);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(presentRenderBuffer);
+        swizzledSelector = @selector(swizzled_presentRenderBuffer);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(bindCurrentRenderBuffer);
+        swizzledSelector = @selector(swizzled_bindCurrentRenderBuffer);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
     });
+}
+
+- (void)swizzled_setCurrentContext {
+    if(self.isRendering)
+        return;
+    [self swizzled_setCurrentContext];
+}
+
+- (void)swizzled_bindCurrentFramebuffer {
+    if(self.isRendering)
+        return;
+    [self swizzled_bindCurrentFramebuffer];
+}
+
+- (BOOL)swizzled_presentRenderBuffer {
+    if(self.isRendering)
+        return YES;
+    return [self swizzled_presentRenderBuffer];
+}
+
+- (void)swizzled_bindCurrentRenderBuffer {
+    if(self.isRendering)
+        return;
+    [self swizzled_bindCurrentRenderBuffer];
 }
 
 #pragma mark - Method Swizzling
 - (void)swizzled_render:(IRFFVideoFrame *)frame {
-    if (CGSizeEqualToSize(CGSizeZero, [self.irOutput viewprotRange].size)) {
+    if ([self.irOutput viewprotRange].size.width == 0 || [self.irOutput viewprotRange].size.height == 0) {
         return;
     }
     
+    [self runSyncInQueue:^{
+        self.isRendering = YES;
+    }];
+    
+    [GPUImageContext useImageProcessingContext];
     GPUImageFramebuffer *outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self.irOutput viewprotRange].size onlyTexture:NO];
     [self.irOutput setOutputFramebuffer:outputFramebuffer];
     [outputFramebuffer activateFramebuffer];
     
     [self swizzled_render:frame];
     
+    [self runSyncInQueue:^{
+        self.isRendering = NO;
+    }];
+    
     [self.irOutput processProgram];
     
     NSLog(@"Render: %@",frame);
+}
+
+- (void)swizzled_layoutSubviews {
+    [self swizzled_layoutSubviews];
+
+    [self setCurrentContext];
+    GLint           _width;
+    GLint           _height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
+    self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
 }
 
 - (void)setup {
@@ -88,6 +159,12 @@ static void *scissorRectKey = &scissorRectKey;
 
 //- (void)setRenderModes:(NSArray<IRGLRenderMode *> *)modes {
 - (void)updateSize {
+    [self runSyncInQueue:^{
+        [self setCurrentContext];
+        [self bindCurrentFramebuffer];
+        [self bindCurrentRenderBuffer];
+    }];
+
     GLint           _width;
     GLint           _height;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
@@ -102,7 +179,7 @@ static void *scissorRectKey = &scissorRectKey;
     
     NSDate *startTime = [NSDate date];
     
-    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+     self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -131,8 +208,6 @@ static void *scissorRectKey = &scissorRectKey;
     self.filter = [[GPUImageFilter alloc] init];
     GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
     blendFilter.mix = 1.0;
-    
-    
     
     UIImageView *imageView= [[UIImageView alloc] initWithFrame:CGRectMake(100.0, 100.0, 40.0f, 40.0f)];
     imageView.image = [UIImage imageNamed:@"Icon"];
@@ -209,6 +284,21 @@ static void *scissorRectKey = &scissorRectKey;
     
     [blendFilter addTarget:self];
     
+    [self.uiElementInput forceProcessingAtSizeRespectingAspectRatio:self.irOutput.viewprotRange.size];
+//    GPUImageNormalBlendFilter *preMaskBocaFilter = [[GPUImageNormalBlendFilter alloc] init];
+//
+//    [self.filter addTarget:preMaskBocaFilter];
+//    [self.uiElementInput addTarget:preMaskBocaFilter];
+//    [preMaskBocaFilter addTarget:self];
+    
+//    GPUImageFilter *progressFilter = [[GPUImageFilter alloc] init];
+//    progressFilter.frameProcessingCompletionBlock = ^(GPUImageOutput *pictureInput, CMTime time) {
+////        [pictureInput processImage];
+//    };
+//    [progressFilter addTarget:blendFilter];
+//
+//    [self.uiElementInput addTarget:progressFilter atTextureLocation:1];
+    
     self.myfilter = blendFilter;
     
     __unsafe_unretained GPUImageUIElement *weakUIElementInput = self.uiElementInput;
@@ -237,21 +327,11 @@ static void *scissorRectKey = &scissorRectKey;
     
     
     
-    [self.filter addTarget:self.cropFilter];
+    [self.myfilter addTarget:self.cropFilter];
     
     [self.filter setInputRotation:kGPUImageNoRotation atIndex:0];
     [self.irOutput addTarget:self.filter];
 }
-
-//- (void)layoutSubviews {
-//    [super layoutSubviews];
-//
-//    GLint           _width;
-//    GLint           _height;
-//    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
-//    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
-//    irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
-//}
 
 //- (void)render:(IRFFVideoFrame *)frame {
 ////    [GPUImageContext useImageProcessingContext];
@@ -363,7 +443,7 @@ static void *scissorRectKey = &scissorRectKey;
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext setActiveShaderProgram:self.displayProgram];
         
-        [self setCurrentContext];
+        [self bindCurrentFramebuffer];
         
         [self clearCurrentBuffer];
         
@@ -392,6 +472,7 @@ static void *scissorRectKey = &scissorRectKey;
         
         glFinish();
         
+//        [self setInputFramebuffer:self.inputFramebufferForDisplay atIndex:0];
         
         [self bindCurrentRenderBuffer];
         [self presentRenderBuffer];
@@ -671,24 +752,24 @@ static void *scissorRectKey = &scissorRectKey;
 -(void)setFilter:(GPUImageOutput<GPUImageInput>*)filter{
     objc_setAssociatedObject(self, &filterKey, filter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
-    if(filter){
-        //        NSArray* targets = [myfilter targets];
-        //        [myfilter removeAllTargets];
-        
-        //        for(id<GPUImageInput> target in targets){
-        //            [filter addTarget:target];
-        //        }
-        //        [filter addTarget:self];
-        //        [myfilter removeTarget:cropFilter];
-        [self.myfilter removeAllTargets];
-        [self.myfilter addTarget:filter];
-        [filter addTarget:self];
-        [filter addTarget:self.cropFilter];
-    }else{
-        [self.myfilter removeAllTargets];
-        [self.myfilter addTarget:self];
-        [self.myfilter addTarget:self.cropFilter];
-    }
+//    if(filter){
+//        //        NSArray* targets = [myfilter targets];
+//        //        [myfilter removeAllTargets];
+//        
+//        //        for(id<GPUImageInput> target in targets){
+//        //            [filter addTarget:target];
+//        //        }
+//        //        [filter addTarget:self];
+//        //        [myfilter removeTarget:cropFilter];
+//        [self.myfilter removeAllTargets];
+//        [self.myfilter addTarget:filter];
+//        [filter addTarget:self];
+//        [filter addTarget:self.cropFilter];
+//    }else{
+//        [self.myfilter removeAllTargets];
+//        [self.myfilter addTarget:self];
+//        [self.myfilter addTarget:self.cropFilter];
+//    }
 }
 
 - (void)setMyfilter:(GPUImageFilter *)myfilter {
@@ -730,6 +811,14 @@ static void *scissorRectKey = &scissorRectKey;
 
 - (BOOL)enabled {
     return [objc_getAssociatedObject(self, &enabledKey) boolValue];
+}
+
+- (void)setIsRendering:(BOOL)isRendering {
+    objc_setAssociatedObject(self, &isRenderingKey, @(isRendering), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (BOOL)isRendering {
+    return [objc_getAssociatedObject(self, &isRenderingKey) boolValue];
 }
 
 - (void)setScissorRect:(CGRect)scissorRect {

@@ -1,6 +1,5 @@
 PODS:
   - FLAnimatedImage (1.0.12)
-  - GPUImage (0.1.7)
   - IRFFMpeg (4.2.19):
     - IRFFMpeg/FFMpegLib (= 4.2.19)
   - IRFFMpeg/FFMpegLib (4.2.19)
@@ -9,7 +8,6 @@ PODS:
 
 DEPENDENCIES:
   - FLAnimatedImage (~> 1.0)
-  - GPUImage (from `https://github.com/BradLarson/GPUImage.git`, branch `master`)
   - IRPlayer (from `../IRPlayer/IRPlayer/IRPlayer_dev.podspec`)
 
 SPEC REPOS:
@@ -18,23 +16,14 @@ SPEC REPOS:
     - IRFFMpeg
 
 EXTERNAL SOURCES:
-  GPUImage:
-    :branch: master
-    :git: https://github.com/BradLarson/GPUImage.git
   IRPlayer:
     :path: "../IRPlayer/IRPlayer/IRPlayer_dev.podspec"
 
-CHECKOUT OPTIONS:
-  GPUImage:
-    :commit: 167b0389bc6e9dc4bb0121550f91d8d5d6412c53
-    :git: https://github.com/BradLarson/GPUImage.git
-
 SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
-  GPUImage: bd7e201b9aa91e85f401ed7a6d9867a07a404693
   IRFFMpeg: 50e159994f9c7c1136b19fc1dea96b4c903b1c9c
   IRPlayer: 07a1888e7ed8dca4512d318b82eacd93d0ae1a8e
 
-PODFILE CHECKSUM: 704d7b02b2dc45f81e4dd4aa0fd96c431b5fbbdf
+PODFILE CHECKSUM: abb5fc84298bb7ea1162627015faad6ba2d3508b
 
 COCOAPODS: 1.8.4

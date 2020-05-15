@@ -11,6 +11,7 @@
 #import "IRGPU.h"
 #import "FilterSelectionView.h"
 #import "FilterItem.h"
+#import "IRGPUPreview.h"
 
 @interface IRPlayerViewController () {
     __weak IBOutlet UIView *stickerSelectionBoard;
@@ -71,7 +72,14 @@
     [super viewDidLayoutSubviews];
 //    self.player.view.frame = self.view.bounds;
     [self.player updateGraphicsViewFrame:self.view.bounds];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     [(IRGLView *)self.player.view updateSize];
+    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
+//    i.VCSessionFrameDelegate = session;
+    
+    [(IRGLView *)self.player.view setOutput:i];
 }
 
 - (void)dealWithNotification:(NSNotification *)notification Player:(IRPlayerImp *)player {
