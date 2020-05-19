@@ -24,6 +24,11 @@
 //        [self.VCSessionFrameDelegate callback:[inputFramebuffer pixelBuffer] durr:50];
 //        //        [inputFramebuffer unlock];
 //    }
+//    if([inputFramebuffer pixelBuffer])
+//        CVPixelBufferRelease([inputFramebuffer pixelBuffer]);
+    inputFramebuffer = nil;
+    [self setInputFramebuffer:inputFramebuffer atIndex:textureIndex];
+//    [inputFramebuffer restoreRenderTarget];
 }
 
 - (void)setInputFramebuffer:(GPUImageFramebuffer *)newInputFramebuffer atIndex:(NSInteger)textureIndex;

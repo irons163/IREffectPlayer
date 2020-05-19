@@ -14,7 +14,8 @@
 #import "GPUImageAlphaBlendFilter.h"
 #import "GPUImageNormalBlendFilter.h"
 
-@implementation IRGLView(AA)
+//@implementation IRGLView(AA)
+@implementation IRGPU
 
 static GLfloat imageVertices[8];
 
@@ -92,26 +93,26 @@ static void *scissorRectKey = &scissorRectKey;
 }
 
 - (void)swizzled_setCurrentContext {
-    if(self.isRendering)
-        return;
+//    if(self.isRendering)
+//        return;
     [self swizzled_setCurrentContext];
 }
 
 - (void)swizzled_bindCurrentFramebuffer {
-    if(self.isRendering)
-        return;
+//    if(self.isRendering)
+//        return;
     [self swizzled_bindCurrentFramebuffer];
 }
 
 - (BOOL)swizzled_presentRenderBuffer {
-    if(self.isRendering)
-        return YES;
+//    if(self.isRendering)
+//        return YES;
     return [self swizzled_presentRenderBuffer];
 }
 
 - (void)swizzled_bindCurrentRenderBuffer {
-    if(self.isRendering)
-        return;
+//    if(self.isRendering)
+//        return;
     [self swizzled_bindCurrentRenderBuffer];
 }
 
@@ -121,6 +122,8 @@ static void *scissorRectKey = &scissorRectKey;
         return;
     }
     
+    @autoreleasepool {
+        
     [self runSyncInQueue:^{
         self.isRendering = YES;
     }];
@@ -139,6 +142,8 @@ static void *scissorRectKey = &scissorRectKey;
     [self.irOutput processProgram];
     
     NSLog(@"Render: %@",frame);
+    
+    }
 }
 
 - (void)swizzled_layoutSubviews {
@@ -150,6 +155,25 @@ static void *scissorRectKey = &scissorRectKey;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
     self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        
+    }
+    return self;
+}
+
+- (void)initDefaultValue {
+    [super initDefaultValue];
+    
+    [self setup];
+}
+
+- (void)initModes {
+    [super initModes];
+    
+    [self updateSize];
 }
 
 - (void)setup {
@@ -179,7 +203,7 @@ static void *scissorRectKey = &scissorRectKey;
     
     NSDate *startTime = [NSDate date];
     
-     self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -190,6 +214,137 @@ static void *scissorRectKey = &scissorRectKey;
     //        [timeLabel setHidden:YES];
     [self.temp addSubview:timeLabel];
     
+    self.myfilter = [[GPUImageFilter alloc] init];
+    self.filter = [[GPUImageFilter alloc] init];
+    GPUImageAlphaBlendFilter *blendFilter = [[GPUImageAlphaBlendFilter alloc] init];
+    blendFilter.mix = 1.0;
+    
+    UIImageView *imageView= [[UIImageView alloc] initWithFrame:CGRectMake(100.0, 100.0, 40.0f, 40.0f)];
+    imageView.image = [UIImage imageNamed:@"Icon"];
+    imageView.backgroundColor = [UIColor clearColor];
+    [self.temp addSubview:imageView];
+    
+    //        UIWebView *webView= [[UIWebView alloc] initWithFrame:CGRectMake(200.0, 200.0, 240.0f, 100.0f)];
+    ////        webView.image = [UIImage imageNamed:@"Icon"];
+    //
+    //        NSString * welcomeGifFileStr;
+    //        if([[UIScreen mainScreen] bounds].size.height == 480){ //4s
+    //            welcomeGifFileStr = @"Jerry Chen_20171120_174247_1";
+    //        }else
+    //            welcomeGifFileStr = @"Jerry Chen_20171120_174247_1";
+    
+    //        self.webViewToDisplayGIF.scrollView.scrollEnabled = NO;
+    //        self.webViewToDisplayGIF.scrollView.bounces = NO;
+    
+    //        NSData *data = [NSData dataWithContentsOfFile: [[NSBundle mainBundle] pathForResource:welcomeGifFileStr ofType:@"gif"]];
+    //        [webView loadData:data MIMEType:@"image/gif" textEncodingName:nil baseURL:nil];
+    //        webView.scalesPageToFit = YES;
+    //        [webView setOpaque:NO];
+    
+    
+    //        UIImage *loadingImage = [UIImage imageNamed:welcomeGifFileStr];
+    //        UIImageView *loadingImageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    //        loadingImageView.image = loadingImage;
+    //        [webView insertSubview:loadingImageView atIndex:0];
+    
+    //        webView.backgroundColor = [UIColor clearColor];
+    //        [temp addSubview:webView];
+    //        dispatch_async(dispatch_get_main_queue(), ^{
+    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
+    gifImageView.frame                = CGRectMake(200.0, 50.0, 80.0f, 160.0f);
+    NSData   *gifImageData             = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"Jerry Chen_20171120_174247_1"] ofType:@"gif" inDirectory:nil]];
+    FLAnimatedImage* animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
+    [gifImageView setAnimatedImage:animatedImage];
+    gifImageView.backgroundColor = [UIColor clearColor];
+    //            [self addSubview:gifImageView];
+    [self.temp addSubview:gifImageView];
+    //            [self addSubview:temp];
+    //            temp.hidden = YES;
+    //            [gifImageView animationRepeatCount];
+    [gifImageView startAnimating];
+    //        });
+    
+    
+    // Set up FLAnimatedImage logging.
+    //        [FLAnimatedImage setLogBlock:^(NSString *logString, FLLogLevel logLevel) {
+    //            // Using NSLog
+    //            NSLog(@"%@", logString);
+    //
+    //            // ...or CocoaLumberjackLogger only logging warnings and errors
+    //            if (logLevel == FLLogLevelError) {
+    //                NSLog(@"%@", logString);
+    //            } else if (logLevel == FLLogLevelWarn) {
+    //                NSLog(@"%@", logString);
+    //            }
+    //        } logLevel:FLLogLevelWarn];
+    
+    FLAnimatedImageView *gifImageView2 = [[FLAnimatedImageView alloc] init];
+    gifImageView2.frame                = CGRectMake(200.0, 50.0, 80.0f, 20.0f);
+    gifImageData             = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"loading_blue"] ofType:@"gif" inDirectory:nil]];
+    animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
+    [gifImageView2 setAnimatedImage:animatedImage];
+    gifImageView2.backgroundColor = [UIColor clearColor];
+    [self.temp addSubview:gifImageView2];
+    [gifImageView2 startAnimating];
+    
+    self.uiElementInput = [[GPUImageUIElement alloc] initWithView:self.temp];
+    [self.filter addTarget:blendFilter atTextureLocation:0];
+    //        [filter addTarget:self];
+    [self.uiElementInput addTarget:blendFilter atTextureLocation:1];
+    
+    [blendFilter addTarget:self];
+    
+    self.myfilter = blendFilter;
+    
+    __unsafe_unretained GPUImageUIElement *weakUIElementInput = self.uiElementInput;
+    
+    [self.filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
+        timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
+        [timeLabel sizeToFit];
+        
+        // 与上一帧的间隔
+        NSTimeInterval interval = 0;
+        //            if (CMTIME_IS_VALID(_lastTime)) {
+        //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
+        //            }
+//        _currentTime = [[NSDate date] timeIntervalSince1970];
+//        if(_lastTime != 0){
+//            interval = _currentTime - _lastTime;
+//        }
+//        _lastTime = _currentTime;
+        interval = 0.1;
+        [gifImageView nextFrameIndexForInterval:interval];
+        [gifImageView2 nextFrameIndexForInterval:interval];
+        [weakUIElementInput update];
+    }];
+    
+    self.cropFilter = [[GPUImageCropFilter alloc] init];
+    self.cropFilter.cropRegion = CGRectMake(0, 0, 0.5f, 0.5f);
+    [self.cropFilter setInputRotation:kGPUImageNoRotation atIndex:0];
+    //    [cropFilter forceProcessingAtSizeRespectingAspectRatio:previewFrame.size];
+    //        [cropFilter addTarget:i];
+    
+    //    [cropFilter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime) {
+    //         runSynchronouslyOnVideoProcessingQueue(^{
+    //        [[filter framebufferForOutput] lock];
+    //        [((id<VCSessionFrameDelegate>)session) callback:[[filter framebufferForOutput] pixelBuffer] durr:50];
+    //        [[filter framebufferForOutput] unlock];
+    //             });
+    //    }];
+    
+    [self.myfilter addTarget:self.cropFilter];
+    
+    [self.filter setInputRotation:kGPUImageNoRotation atIndex:0];
+    [self.irOutput addTarget:self.filter];
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
     self.cropFilter = [[GPUImageCropFilter alloc] init];
     self.cropFilter.cropRegion = CGRectMake(0, 0, 0.5f, 0.5f);
     [self.cropFilter setInputRotation:kGPUImageNoRotation atIndex:0];
@@ -231,7 +386,7 @@ static void *scissorRectKey = &scissorRectKey;
     //        webView.scalesPageToFit = YES;
     //        [webView setOpaque:NO];
     
-    //**************** Add Static loading image to prevent white "flash" ****************/
+    
     //        UIImage *loadingImage = [UIImage imageNamed:welcomeGifFileStr];
     //        UIImageView *loadingImageView = [[UIImageView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     //        loadingImageView.image = loadingImage;
@@ -331,6 +486,7 @@ static void *scissorRectKey = &scissorRectKey;
     
     [self.filter setInputRotation:kGPUImageNoRotation atIndex:0];
     [self.irOutput addTarget:self.filter];
+    */
 }
 
 //- (void)render:(IRFFVideoFrame *)frame {
@@ -395,6 +551,7 @@ static void *scissorRectKey = &scissorRectKey;
         imageVertices[6] = 1;
         imageVertices[7] = 1;
     });
+     
 }
 
 
@@ -442,43 +599,43 @@ static void *scissorRectKey = &scissorRectKey;
     //    dispatch_sync(queue, ^{
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext setActiveShaderProgram:self.displayProgram];
-        
+
         [self bindCurrentFramebuffer];
-        
+
         [self clearCurrentBuffer];
-        
-        
-        
+
+
+
         if(!CGRectEqualToRect(self.scissorRect, CGRectZero)){
             glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
         }
-        
+
         glActiveTexture(GL_TEXTURE7);
         glBindTexture(GL_TEXTURE_2D, [self.inputFramebufferForDisplay texture]);
         glUniform1i(self.displayInputTextureUniform, 7);
-        
+
         glVertexAttribPointer(self.displayPositionAttribute, 2, GL_FLOAT, 0, 0, imageVertices);
-        glVertexAttribPointer(self.displayTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, [IRGLView textureCoordinatesForRotation:self.inputRotation]);
-        
+        glVertexAttribPointer(self.displayTextureCoordinateAttribute, 2, GL_FLOAT, 0, 0, [IRGPU textureCoordinatesForRotation:self.inputRotation]);
+
         if(!CGRectEqualToRect(self.scissorRect, CGRectZero)){
             //            glEnable(GL_SCISSOR_TEST);
             //            glScissor(self.scissorRect.origin.x, self.scissorRect.origin.y, self.scissorRect.size.width, self.scissorRect.size.height);
         }
-        
+
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-        
-        
-        
+
+
+
         glFinish();
         
 //        [self setInputFramebuffer:self.inputFramebufferForDisplay atIndex:0];
-        
+
         [self bindCurrentRenderBuffer];
         [self presentRenderBuffer];
-        
-        
-        
+
+
+
         [self.inputFramebufferForDisplay unlock];
         self.inputFramebufferForDisplay = nil;
         
@@ -648,7 +805,7 @@ static void *scissorRectKey = &scissorRectKey;
 }
 
 
-
+/*
 - (void)setDisplayProgram:(GLProgram *)displayProgram {
     objc_setAssociatedObject(self, &displayProgramKey, displayProgram, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -795,16 +952,16 @@ static void *scissorRectKey = &scissorRectKey;
 - (WorkView *)temp {
     return objc_getAssociatedObject(self, &tempKey);
 }
-
+*/
 - (void)setOutput:(IRGLView *)output {
-    objc_setAssociatedObject(self, &outputKey, output, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+//    objc_setAssociatedObject(self, &outputKey, output, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     [self.cropFilter addTarget:output];
 }
 
-- (IRGLView *)output {
-    return objc_getAssociatedObject(self, &outputKey);
-}
-
+//- (IRGLView *)output {
+//    return objc_getAssociatedObject(self, &outputKey);
+//}
+/*
 - (void)setEnabled:(BOOL)enabled {
     objc_setAssociatedObject(self, &enabledKey, @(enabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -828,5 +985,5 @@ static void *scissorRectKey = &scissorRectKey;
 - (CGRect)scissorRect {
     return [objc_getAssociatedObject(self, &scissorRectKey) CGRectValue];
 }
-
+*/
 @end

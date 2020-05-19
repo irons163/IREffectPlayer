@@ -21,10 +21,11 @@
 @class GPUImageView;
 @class GPUImageOutput;
 
-@interface IRGLView(AA)<GPUImageInput>
+//@interface IRGLView(AA)<GPUImageInput>
+@interface IRGPU :IRGLView <GPUImageInput>
 
 @property (strong, nonatomic) WorkView *temp;
-@property (strong, nonatomic) IRGLView* output;
+//@property (strong, nonatomic) IRGLView* output;
 @property(nonatomic) BOOL enabled;
 @property(nonatomic) BOOL isRendering;
 @property (nonatomic) CGRect scissorRect;
@@ -46,13 +47,14 @@
 @property (strong, nonatomic) IROutput *irOutput;
 @property (strong, nonatomic) GPUImageUIElement* uiElementInput;
 
-- (void)setup;
-- (void)updateSize;
+//- (void)setup;
+//- (void)updateSize;
 - (void)updateStickViews:(NSArray<StickerView*>*)stickViews;
 
 //- (GPUImageFilter*)getFilter;
 //- (void)setFilter:(GPUImageOutput<GPUImageInput>*)filter;
 //- (void)setOutput:(GPUImageView *)output;
+- (void)setOutput:(IRGLView *)output;
 
 - (void)setCurrentContext;
 - (void)bindCurrentFramebuffer;
