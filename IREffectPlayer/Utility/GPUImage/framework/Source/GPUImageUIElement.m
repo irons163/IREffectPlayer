@@ -144,11 +144,14 @@
                                               kCGBitmapByteOrder32Little | kCGImageAlphaPremultipliedFirst
                                               );
          
+         
          //         CGContextScaleCTM(bitmapContext, _scale, _scale);
          //         CGAffineTransform flipVertical = CGAffineTransformMake(1, 0, 0, -1, 0, _viewSize.height);
          //         CGContextConcatCTM(bitmapContext, flipVertical);
-        CGContextTranslateCTM(imageContext, 0.0f, layerPixelSize.height);
-        CGContextScaleCTM(imageContext, layer.contentsScale, -layer.contentsScale);
+//        CGContextTranslateCTM(imageContext, 0.0f, layerPixelSize.height);
+//        CGContextScaleCTM(imageContext, layer.contentsScale, -layer.contentsScale);
+         CGContextTranslateCTM(imageContext, 0.0f, 0);
+         CGContextScaleCTM(imageContext, layer.contentsScale, layer.contentsScale);
          
          void (^yourBlock)(void) = ^(void) {
 //             UIGraphicsPushContext(imageContext); {

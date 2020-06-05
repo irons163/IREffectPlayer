@@ -13,6 +13,8 @@
 #import "GPUImageCropFilter.h"
 #import "GPUImageAlphaBlendFilter.h"
 #import "GPUImageNormalBlendFilter.h"
+#import "GPUImageTransformFilter.h"
+#import <IRGLProgram2D.h>
 
 //@implementation IRGLView(AA)
 @implementation IRGPU
@@ -89,30 +91,39 @@ static void *scissorRectKey = &scissorRectKey;
         swizzledSelector = @selector(swizzled_bindCurrentRenderBuffer);
         
         [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
+        
+        defaultSelector = @selector(setupContext);
+        swizzledSelector = @selector(swizzled_setupContext);
+        
+        [self swizzelWithDefaultSelector:defaultSelector swizzledSelector:swizzledSelector];
     });
 }
 
+- (EAGLContext *)swizzled_setupContext {
+    return [[GPUImageContext sharedImageProcessingContext] context];
+}
+
 - (void)swizzled_setCurrentContext {
-//    if(self.isRendering)
-//        return;
+    if(self.isRendering)
+        return;
     [self swizzled_setCurrentContext];
 }
 
 - (void)swizzled_bindCurrentFramebuffer {
-//    if(self.isRendering)
-//        return;
+    if(self.isRendering)
+        return;
     [self swizzled_bindCurrentFramebuffer];
 }
 
 - (BOOL)swizzled_presentRenderBuffer {
-//    if(self.isRendering)
-//        return YES;
+    if(self.isRendering)
+        return YES;
     return [self swizzled_presentRenderBuffer];
 }
 
 - (void)swizzled_bindCurrentRenderBuffer {
-//    if(self.isRendering)
-//        return;
+    if(self.isRendering)
+        return;
     [self swizzled_bindCurrentRenderBuffer];
 }
 
@@ -123,26 +134,26 @@ static void *scissorRectKey = &scissorRectKey;
     }
     
     @autoreleasepool {
-        
-    [self runSyncInQueue:^{
-        self.isRendering = YES;
-    }];
-    
-    [GPUImageContext useImageProcessingContext];
-    GPUImageFramebuffer *outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self.irOutput viewprotRange].size onlyTexture:NO];
-    [self.irOutput setOutputFramebuffer:outputFramebuffer];
-    [outputFramebuffer activateFramebuffer];
-    
-    [self swizzled_render:frame];
-    
-    [self runSyncInQueue:^{
-        self.isRendering = NO;
-    }];
-    
-    [self.irOutput processProgram];
-    
-    NSLog(@"Render: %@",frame);
-    
+        runSynchronouslyOnVideoProcessingQueue(^{
+            
+            [self.irOutput processProgram];
+            
+            [self runSyncInQueue:^{
+                self.isRendering = YES;
+            }];
+            [GPUImageContext useImageProcessingContext];
+            GPUImageFramebuffer *outputFramebuffer = [[GPUImageContext sharedFramebufferCache] fetchFramebufferForSize:[self.irOutput viewprotRange].size onlyTexture:NO];
+            [self.irOutput setOutputFramebuffer:outputFramebuffer];
+            [outputFramebuffer activateFramebuffer];
+            
+            [self swizzled_render:frame];
+            
+            [self runSyncInQueue:^{
+                self.isRendering = NO;
+            }];
+            
+            NSLog(@"Render: %@",frame);
+        });
     }
 }
 
@@ -197,13 +208,15 @@ static void *scissorRectKey = &scissorRectKey;
     
     
     if (self.temp) {
-        [self.temp setFrame:self.irOutput.viewprotRange];
+//        [self.temp setFrame:self.irOutput.viewprotRange];
+        [self.temp setFrame:self.frame];
         return;
     }
     
     NSDate *startTime = [NSDate date];
     
-    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+//    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+    self.temp = [[WorkView alloc] initWithFrame:self.frame];
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -288,36 +301,50 @@ static void *scissorRectKey = &scissorRectKey;
     [gifImageView2 startAnimating];
     
     self.uiElementInput = [[GPUImageUIElement alloc] initWithView:self.temp];
-    [self.filter addTarget:blendFilter atTextureLocation:0];
-    //        [filter addTarget:self];
-    [self.uiElementInput addTarget:blendFilter atTextureLocation:1];
+//    GPUImageTransformFilter *transformFilter = [[GPUImageTransformFilter alloc] init];
+//    CGAffineTransform newTransform = CGAffineTransformScale(transformFilter.affineTransform, 1, 1);
+
+//    [transformFilter setAffineTransform:newTransform];
+//    transformFilter.anchorTopLeft = YES;
+//    [self.uiElementInput addTarget:transformFilter];
     
+    [self.filter addTarget:blendFilter atTextureLocation:0];
+//            [filter addTarget:self];
+    [self.uiElementInput addTarget:blendFilter atTextureLocation:1];
+//    [blendFilter addTarget:transformFilter];
+    
+//    [transformFilter addTarget:self];
     [blendFilter addTarget:self];
     
     self.myfilter = blendFilter;
     
     __unsafe_unretained GPUImageUIElement *weakUIElementInput = self.uiElementInput;
+//    [weakUIElementInput update];
+//    [weakUIElementInput forceProcessingAtSize:self.irOutput.viewprotRange.size];
     
     [self.filter setFrameProcessingCompletionBlock:^(GPUImageOutput * filter, CMTime frameTime){
-        timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
-        [timeLabel sizeToFit];
-        
-        // 与上一帧的间隔
-        NSTimeInterval interval = 0;
-        //            if (CMTIME_IS_VALID(_lastTime)) {
-        //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
-        //            }
-//        _currentTime = [[NSDate date] timeIntervalSince1970];
-//        if(_lastTime != 0){
-//            interval = _currentTime - _lastTime;
-//        }
-//        _lastTime = _currentTime;
-        interval = 0.1;
-        [gifImageView nextFrameIndexForInterval:interval];
-        [gifImageView2 nextFrameIndexForInterval:interval];
-        [weakUIElementInput update];
+        dispatch_async(dispatch_get_main_queue(), ^{
+                    timeLabel.text = [NSString stringWithFormat:@"Time: %f s", -[startTime timeIntervalSinceNow]];
+                    [timeLabel sizeToFit];
+                    
+                    // 与上一帧的间隔
+                    NSTimeInterval interval = 0;
+                    //            if (CMTIME_IS_VALID(_lastTime)) {
+                    //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
+                    //            }
+            //        _currentTime = [[NSDate date] timeIntervalSince1970];
+            //        if(_lastTime != 0){
+            //            interval = _currentTime - _lastTime;
+            //        }
+            //        _lastTime = _currentTime;
+                    interval = 0.1;
+                    [gifImageView nextFrameIndexForInterval:interval];
+                    [gifImageView2 nextFrameIndexForInterval:interval];
+                    [weakUIElementInput update];
+        });
+
     }];
-    
+    /*
     self.cropFilter = [[GPUImageCropFilter alloc] init];
     self.cropFilter.cropRegion = CGRectMake(0, 0, 0.5f, 0.5f);
     [self.cropFilter setInputRotation:kGPUImageNoRotation atIndex:0];
@@ -333,7 +360,8 @@ static void *scissorRectKey = &scissorRectKey;
     //    }];
     
     [self.myfilter addTarget:self.cropFilter];
-    
+    */
+//    [self.filter addTarget:self];
     [self.filter setInputRotation:kGPUImageNoRotation atIndex:0];
     [self.irOutput addTarget:self.filter];
     
@@ -499,6 +527,39 @@ static void *scissorRectKey = &scissorRectKey;
 //
 //}
 
+NSString *const kGPUImageVertexShaderString2 = SHADER_STRING
+ (attribute vec4 position;
+  attribute vec4 inputTextureCoordinate;
+  
+  varying vec2 textureCoordinate;
+  
+  void main()
+  {
+    float left = -1.0;
+    float right = 1.0;
+    float bottom = -1.0;
+    float top = 1.0;
+    float nearZ = -1.0;
+    float farZ = 1.0;
+    
+    float ral = right + left;
+    float rsl = right - left;
+    float tab = top + bottom;
+    float tsb = top - bottom;
+    float fan = farZ + nearZ;
+    float fsn = farZ - nearZ;
+    
+    mat4 m4 = mat4( 2.0 / rsl, 0.0, 0.0, 0.0,
+        0.0, 2.0 / tsb, 0.0, 0.0,
+        0.0, 0.0, -2.0 / fsn, 0.0,
+        -ral / rsl, -tab / tsb, -fan / fsn, 1.0 );
+    
+    gl_Position = m4 * position;
+//    gl_Position = position;
+    textureCoordinate = inputTextureCoordinate.xy;
+}
+);
+
 - (void)commonInit;
 {
     // Set scaling to account for Retina display
@@ -514,7 +575,7 @@ static void *scissorRectKey = &scissorRectKey;
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext useImageProcessingContext];
         
-        self.displayProgram = [[GPUImageContext sharedImageProcessingContext] programForVertexShaderString:kGPUImageVertexShaderString fragmentShaderString:kGPUImagePassthroughFragmentShaderString];
+        self.displayProgram = [[GPUImageContext sharedImageProcessingContext] programForVertexShaderString:kGPUImageVertexShaderString2 fragmentShaderString:kGPUImagePassthroughFragmentShaderString];
         if (!self.displayProgram.initialized)
         {
             [self.displayProgram addAttribute:@"position"];
@@ -596,6 +657,7 @@ static void *scissorRectKey = &scissorRectKey;
 
 - (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
 {
+//    return;
     //    dispatch_sync(queue, ^{
     runSynchronouslyOnVideoProcessingQueue(^{
         [GPUImageContext setActiveShaderProgram:self.displayProgram];
@@ -622,14 +684,15 @@ static void *scissorRectKey = &scissorRectKey;
             //            glEnable(GL_SCISSOR_TEST);
             //            glScissor(self.scissorRect.origin.x, self.scissorRect.origin.y, self.scissorRect.size.width, self.scissorRect.size.height);
         }
-
+        
+//        CGRect viewport = [self.getCurrentRenderMode.program calculateViewport];
+//        glViewport(viewport.origin.x, -viewport.origin.y, viewport.size.width + 100, viewport.size.height);
+//        glViewport(0, 0, viewport.size.width, viewport.size.height);
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
 
 
         glFinish();
-        
-//        [self setInputFramebuffer:self.inputFramebufferForDisplay atIndex:0];
 
         [self bindCurrentRenderBuffer];
         [self presentRenderBuffer];
@@ -728,68 +791,117 @@ static void *scissorRectKey = &scissorRectKey;
 
 + (const GLfloat *)textureCoordinatesForRotation:(GPUImageRotationMode)rotationMode;
 {
-    //    static const GLfloat noRotationTextureCoordinates[] = {
-    //        0.0f, 0.0f,
-    //        1.0f, 0.0f,
-    //        0.0f, 1.0f,
-    //        1.0f, 1.0f,
-    //    };
-    
     static const GLfloat noRotationTextureCoordinates[] = {
-        0.0f, 1.0f,
-        1.0f, 1.0f,
         0.0f, 0.0f,
         1.0f, 0.0f,
-    };
-    
-    static const GLfloat rotateRightTextureCoordinates[] = {
-        1.0f, 1.0f,
-        1.0f, 0.0f,
         0.0f, 1.0f,
-        0.0f, 0.0f,
+        1.0f, 1.0f,
     };
     
     static const GLfloat rotateLeftTextureCoordinates[] = {
-        0.0f, 0.0f,
-        0.0f, 1.0f,
         1.0f, 0.0f,
         1.0f, 1.0f,
+        0.0f, 0.0f,
+        0.0f, 1.0f,
+    };
+    
+    static const GLfloat rotateRightTextureCoordinates[] = {
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+        1.0f, 1.0f,
+        1.0f, 0.0f,
     };
     
     static const GLfloat verticalFlipTextureCoordinates[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
         0.0f, 1.0f,
         1.0f, 1.0f,
+        0.0f,  0.0f,
+        1.0f,  0.0f,
     };
     
     static const GLfloat horizontalFlipTextureCoordinates[] = {
-        1.0f, 1.0f,
-        0.0f, 1.0f,
         1.0f, 0.0f,
         0.0f, 0.0f,
+        1.0f,  1.0f,
+        0.0f,  1.0f,
     };
     
     static const GLfloat rotateRightVerticalFlipTextureCoordinates[] = {
-        1.0f, 0.0f,
-        1.0f, 1.0f,
         0.0f, 0.0f,
         0.0f, 1.0f,
+        1.0f, 0.0f,
+        1.0f, 1.0f,
     };
-    
+
     static const GLfloat rotateRightHorizontalFlipTextureCoordinates[] = {
-        0.0f, 1.0f,
-        0.0f, 0.0f,
         1.0f, 1.0f,
         1.0f, 0.0f,
+        0.0f, 1.0f,
+        0.0f, 0.0f,
+    };
+
+    static const GLfloat rotate180TextureCoordinates[] = {
+        1.0f, 1.0f,
+        0.0f, 1.0f,
+        1.0f, 0.0f,
+        0.0f, 0.0f,
     };
     
-    static const GLfloat rotate180TextureCoordinates[] = {
-        1.0f, 0.0f,
-        0.0f, 0.0f,
-        1.0f, 1.0f,
-        0.0f, 1.0f,
-    };
+//    static const GLfloat noRotationTextureCoordinates[] = {
+//        0.0f, 1.0f,
+//        1.0f, 1.0f,
+//        0.0f, 0.0f,
+//        1.0f, 0.0f,
+//    };
+//
+//    static const GLfloat rotateRightTextureCoordinates[] = {
+//        1.0f, 1.0f,
+//        1.0f, 0.0f,
+//        0.0f, 1.0f,
+//        0.0f, 0.0f,
+//    };
+//
+//    static const GLfloat rotateLeftTextureCoordinates[] = {
+//        0.0f, 0.0f,
+//        0.0f, 1.0f,
+//        1.0f, 0.0f,
+//        1.0f, 1.0f,
+//    };
+//
+//    static const GLfloat verticalFlipTextureCoordinates[] = {
+//        0.0f, 0.0f,
+//        1.0f, 0.0f,
+//        0.0f, 1.0f,
+//        1.0f, 1.0f,
+//    };
+//
+//    static const GLfloat horizontalFlipTextureCoordinates[] = {
+//        1.0f, 1.0f,
+//        0.0f, 1.0f,
+//        1.0f, 0.0f,
+//        0.0f, 0.0f,
+//    };
+//
+//    static const GLfloat rotateRightVerticalFlipTextureCoordinates[] = {
+//        1.0f, 0.0f,
+//        1.0f, 1.0f,
+//        0.0f, 0.0f,
+//        0.0f, 1.0f,
+//    };
+//
+//    static const GLfloat rotateRightHorizontalFlipTextureCoordinates[] = {
+//        0.0f, 1.0f,
+//        0.0f, 0.0f,
+//        1.0f, 1.0f,
+//        1.0f, 0.0f,
+//    };
+//
+//    static const GLfloat rotate180TextureCoordinates[] = {
+//        1.0f, 0.0f,
+//        0.0f, 0.0f,
+//        1.0f, 1.0f,
+//        0.0f, 1.0f,
+//    };
     
     switch(rotationMode)
     {

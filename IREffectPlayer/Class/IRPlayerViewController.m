@@ -81,8 +81,8 @@
         NSLog(@"player display view did click!");
     }];
     self.player.decoder = [IRPlayerDecoder FFmpegDecoder];
-    [self.player replaceVideoWithURL:normalVideo];
     [self.mainView insertSubview:self.player.view atIndex:0];
+    [self.player replaceVideoWithURL:normalVideo];
     
 //    [(IRGPU *)self.player.view setup];
 }
@@ -99,7 +99,7 @@
     IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
 //    i.VCSessionFrameDelegate = session;
     
-//    [(IRGPU *)self.player.view setOutput:i];
+    [(IRGPU *)self.player.view setOutput:i];
     [self.mainView addSubview:i];
 }
 

@@ -12,6 +12,26 @@ NSString *const kGPUImageVertexShaderString = SHADER_STRING
  
  void main()
  {
+    float left = -1.0;
+    float right = 1.0;
+    float bottom = -1.0;
+    float top = 1.0;
+    float nearZ = -1.0;
+    float farZ = 1.0;
+    
+    float ral = right + left;
+    float rsl = right - left;
+    float tab = top + bottom;
+    float tsb = top - bottom;
+    float fan = farZ + nearZ;
+    float fsn = farZ - nearZ;
+    
+    mat4 m3 = mat4( 2.0 / rsl, 0.0, 0.0, 0.0,
+        0.0, 2.0 / tsb, 0.0, 0.0,
+        0.0, 0.0, -2.0 / fsn, 0.0,
+        -ral / rsl, -tab / tsb, -fan / fsn, 1.0 );
+    
+//    gl_Position = m * position;
      gl_Position = position;
      textureCoordinate = inputTextureCoordinate.xy;
  }
@@ -220,12 +240,19 @@ NSString *const kGPUImagePassthroughFragmentShaderString = SHADER_STRING
 
 + (const GLfloat *)textureCoordinatesForRotation:(GPUImageRotationMode)rotationMode;
 {
-    static const GLfloat noRotationTextureCoordinates[] = {
-        0.0f, 0.0f,
-        1.0f, 0.0f,
-        0.0f, 1.0f,
-        1.0f, 1.0f,
-    };
+        static const GLfloat noRotationTextureCoordinates[] = {
+            0.0f, 0.0f,
+            1.0f, 0.0f,
+            0.0f, 1.0f,
+            1.0f, 1.0f,
+        };
+        
+//    static const GLfloat noRotationTextureCoordinates[] = {
+//        0.0f, 1.0f,
+//        1.0f, 1.0f,
+//        0.0f, 0.0f,
+//        1.0f, 0.0f,
+//    };
     
     static const GLfloat rotateLeftTextureCoordinates[] = {
         1.0f, 0.0f,

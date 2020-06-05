@@ -26,8 +26,8 @@
 //    }
 //    if([inputFramebuffer pixelBuffer])
 //        CVPixelBufferRelease([inputFramebuffer pixelBuffer]);
-    inputFramebuffer = nil;
-    [self setInputFramebuffer:inputFramebuffer atIndex:textureIndex];
+//    inputFramebuffer = nil;
+//    [self setInputFramebuffer:inputFramebuffer atIndex:textureIndex];
 //    [inputFramebuffer restoreRenderTarget];
 }
 
