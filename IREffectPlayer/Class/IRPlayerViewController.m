@@ -9,12 +9,13 @@
 #import "IRPlayerViewController.h"
 #import "IRGPU.h"
 #import <IRPlayer/IRPlayer.h>
+#import "StickerSelectionView.h"
 #import "FilterSelectionView.h"
 #import "FilterItem.h"
 #import "IRGPUPreview.h"
 #import <objc/runtime.h>
 
-@interface IRPlayerViewController () {
+@interface IRPlayerViewController ()<WorkViewDelegate> {
     __weak IBOutlet UIView *stickerSelectionBoard;
     __weak IBOutlet UIButton *effectiveButton;
     __weak IBOutlet UIButton *stickerModeButton;
@@ -61,6 +62,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    
+    
+    
+}
+
+- (void)viewDidLayoutSubviews
+{
+    [super viewDidLayoutSubviews];
+//    [self.player updateGraphicsViewFrame:self.view.bounds];
+//    [((IRGPU *)self.player.view) updateSize];
+//    [((IRGPU *)self.player.view) setRenderModes:nil];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     static NSURL * normalVideo = nil;
     static NSURL * vrVideo = nil;
     static NSURL * fisheyeVideo = nil;
@@ -83,24 +98,18 @@
     self.player.decoder = [IRPlayerDecoder FFmpegDecoder];
     [self.mainView insertSubview:self.player.view atIndex:0];
     [self.player replaceVideoWithURL:normalVideo];
-    
-//    [(IRGPU *)self.player.view setup];
-}
-
-- (void)viewDidLayoutSubviews
-{
-    [super viewDidLayoutSubviews];
-//    self.player.view.frame = self.view.bounds;
-    [self.player updateGraphicsViewFrame:self.view.bounds];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-//    [(IRGPU *)self.player.view updateSize];
-    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
-//    i.VCSessionFrameDelegate = session;
-    
-    [(IRGPU *)self.player.view setOutput:i];
-    [self.mainView addSubview:i];
+//    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
+//    
+//    [(IRGPU *)self.player.view setOutput:i];
+//    [self.mainView addSubview:i];
+    WorkView *workView = [[WorkView alloc] initWithFrame:self.mainView.bounds];
+    workView.delegate = self;
+    workView.drawView = ((IRGPU *)self.player.view).temp;
+    workView.drawView.delegate = self;
+    [self.mainView addSubview:workView];
+//    [self.mainView addSubview:workView.drawView];
+    self.workView = workView;
+    self.drawView = workView.drawView;
 }
 
 - (void)dealWithNotification:(NSNotification *)notification Player:(IRPlayerImp *)player {
@@ -152,12 +161,6 @@
         return;
     }
 }
-
-//-(void)updatedSettings:(DeviceClass *)device{
-//    m_aryDevices = [NSMutableArray arrayWithArray:[IRStreamConnectionRequestFactory createStreamConnectionRequest]];
-//
-//    [self startStreamConnectionByDeviceIndex:0];
-//}
 
 - (void)stateAction:(NSNotification *)notification {
     [self dealWithNotification:notification Player:self.player];
@@ -240,11 +243,12 @@
     [self handleModeSelect:isSelected];
     
     if(isSelected){
-        desVC.selectedIndex = 0;
+        desVC.selectedIndex = 3;
         
-        ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
+        ((StickerSelectionView *)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(Sticker *sticker){
             //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) setFilter:filter.filter];
+//            [((IRGPU *)self.player.view) addFilter:filter.filter];
+            [self.workView addSticker:sticker];
         };
         
         filterModeButton.selected = !isSelected;
@@ -262,7 +266,7 @@
         
         ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
             //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) setFilter:filter.filter];
+            [((IRGPU *)self.player.view) addFilter:filter.filter];
         };
         
         stickerModeButton.selected = !isSelected;
@@ -278,14 +282,14 @@
         stickerSelectionBoard.hidden = !isSelected;
     }
     
-    stickerSelectionBoard.userInteractionEnabled = NO;
+//    stickerSelectionBoard.userInteractionEnabled = NO;
     
     if(isSelected){
         desVC.selectedIndex = 1;
         
         ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
             //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) setFilter:filter.filter];
+            [((IRGPU *)self.player.view) addFilter:filter.filter];
         };
         
         stickerModeButton.selected = !isSelected;
@@ -309,7 +313,7 @@
         
         ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
             //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) setFilter:filter.filter];
+            [((IRGPU *)self.player.view) addFilter:filter.filter];
         };
         
         stickerModeButton.selected = !isSelected;

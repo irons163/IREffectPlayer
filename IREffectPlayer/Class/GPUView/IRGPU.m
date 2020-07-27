@@ -161,11 +161,18 @@ static void *scissorRectKey = &scissorRectKey;
     [self swizzled_layoutSubviews];
 
     [self setCurrentContext];
+    [self bindCurrentFramebuffer];
+    [self bindCurrentRenderBuffer];
     GLint           _width;
     GLint           _height;
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
     glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
     self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
+    
+//    [self.uiElementInput forceProcessingAtSize:CGSizeMake(_width / 2 + 1, _height / 2)];
+//    [self.uiElementInput forceProcessingAtSize:CGSizeMake(_width + 1, _height / 4)];
+//    [self.myfilter forceProcessingAtSize:CGSizeMake(_width / 2, _height / 2)];
+//    [self.filter forceProcessingAtSize:CGSizeMake(_width / 2, _height / 2)];
 }
 
 - (instancetype)init {
@@ -198,18 +205,20 @@ static void *scissorRectKey = &scissorRectKey;
         [self setCurrentContext];
         [self bindCurrentFramebuffer];
         [self bindCurrentRenderBuffer];
+        
+        GLint           _width;
+        GLint           _height;
+        glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
+        glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
+        self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
     }];
-
-    GLint           _width;
-    GLint           _height;
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &_width);
-    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &_height);
-    self.irOutput.viewprotRange = CGRectMake(0, 0, _width, _height);
-    
     
     if (self.temp) {
 //        [self.temp setFrame:self.irOutput.viewprotRange];
         [self.temp setFrame:self.frame];
+//        self.temp.widthAnchor.
+//        [self.temp.widthAnchor constraintEqualToConstant:self.frame.size.width].active = YES;
+//        [self.temp.heightAnchor constraintEqualToConstant:self.frame.size.height].active = YES;
         return;
     }
     
@@ -217,6 +226,9 @@ static void *scissorRectKey = &scissorRectKey;
     
 //    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
     self.temp = [[WorkView alloc] initWithFrame:self.frame];
+//    self.temp.translatesAutoresizingMaskIntoConstraints = NO;
+//    [self.temp.widthAnchor constraintEqualToConstant:self.frame.size.width].active = YES;
+//    [self.temp.heightAnchor constraintEqualToConstant:self.frame.size.height].active = YES;
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -916,6 +928,26 @@ NSString *const kGPUImageVertexShaderString2 = SHADER_STRING
     }
 }
 
+-(void)addFilter:(GPUImageOutput<GPUImageInput>*)filter{
+    if(filter){
+        //        NSArray* targets = [myfilter targets];
+        //        [myfilter removeAllTargets];
+
+        //        for(id<GPUImageInput> target in targets){
+        //            [filter addTarget:target];
+        //        }
+        //        [filter addTarget:self];
+        //        [myfilter removeTarget:cropFilter];
+        [self.myfilter removeAllTargets];
+        [self.myfilter addTarget:filter];
+        [filter addTarget:self];
+//        [filter addTarget:self.cropFilter];
+    }else{
+        [self.myfilter removeAllTargets];
+        [self.myfilter addTarget:self];
+//        [self.myfilter addTarget:self.cropFilter];
+    }
+}
 
 /*
 - (void)setDisplayProgram:(GLProgram *)displayProgram {

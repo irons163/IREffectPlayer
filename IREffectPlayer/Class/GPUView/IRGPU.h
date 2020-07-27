@@ -48,13 +48,14 @@
 @property (strong, nonatomic) GPUImageUIElement* uiElementInput;
 
 //- (void)setup;
-//- (void)updateSize;
+- (void)updateSize;
 - (void)updateStickViews:(NSArray<StickerView*>*)stickViews;
 
 //- (GPUImageFilter*)getFilter;
 //- (void)setFilter:(GPUImageOutput<GPUImageInput>*)filter;
 //- (void)setOutput:(GPUImageView *)output;
 - (void)setOutput:(IRGLView *)output;
+-(void)addFilter:(GPUImageOutput<GPUImageInput>*)filter;
 
 - (void)setCurrentContext;
 - (void)bindCurrentFramebuffer;

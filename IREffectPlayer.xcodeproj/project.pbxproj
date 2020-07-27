@@ -19,7 +19,6 @@
 		B54A9F6D2407A74000290CAF /* StickerView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B54A9F682407A74000290CAF /* StickerView.bundle */; };
 		B54A9F6E2407A74000290CAF /* SingleHandGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F6B2407A74000290CAF /* SingleHandGestureRecognizer.m */; };
 		B54A9F6F2407A74000290CAF /* StickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F6C2407A74000290CAF /* StickerView.m */; };
-		B54A9F722407A75F00290CAF /* Sticker.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F702407A75F00290CAF /* Sticker.m */; };
 		B54A9F762407A9F500290CAF /* IRPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F742407A9F500290CAF /* IRPlayerViewController.m */; };
 		B54A9F7F241641B900290CAF /* FilterSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F79241641B800290CAF /* FilterSelectionView.m */; };
 		B54A9F80241641B900290CAF /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F7B241641B800290CAF /* FilterCell.m */; };
@@ -213,6 +212,9 @@
 		B5BA3F90241F1E920006D465 /* .gitignore in Resources */ = {isa = PBXBuildFile; fileRef = B5BA3ED7241F1E920006D465 /* .gitignore */; };
 		B5BA3F91241F1E920006D465 /* License.txt in Resources */ = {isa = PBXBuildFile; fileRef = B5BA3ED8241F1E920006D465 /* License.txt */; };
 		B5BA3F92241F1E920006D465 /* .travis.yml in Resources */ = {isa = PBXBuildFile; fileRef = B5BA3ED9241F1E920006D465 /* .travis.yml */; };
+		B5BA5609248DE21000F740DC /* StickerSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BA5608248DE21000F740DC /* StickerSelectionView.m */; };
+		B5BA560F248DE26E00F740DC /* StickerCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BA560E248DE26E00F740DC /* StickerCell.m */; };
+		B5BA5612248DE48300F740DC /* Sticker.m in Sources */ = {isa = PBXBuildFile; fileRef = B5BA5611248DE48300F740DC /* Sticker.m */; };
 		E8720D8204687F93B4AFC807 /* Pods_IREffectPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0EA4818CE8EE33C71AC84EA4 /* Pods_IREffectPlayer.framework */; };
 /* End PBXBuildFile section */
 
@@ -241,8 +243,6 @@
 		B54A9F6A2407A74000290CAF /* SingleHandGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleHandGestureRecognizer.h; sourceTree = "<group>"; };
 		B54A9F6B2407A74000290CAF /* SingleHandGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleHandGestureRecognizer.m; sourceTree = "<group>"; };
 		B54A9F6C2407A74000290CAF /* StickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StickerView.m; sourceTree = "<group>"; };
-		B54A9F702407A75F00290CAF /* Sticker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sticker.m; sourceTree = "<group>"; };
-		B54A9F712407A75F00290CAF /* Sticker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sticker.h; sourceTree = "<group>"; };
 		B54A9F732407A9F500290CAF /* IRPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRPlayerViewController.h; sourceTree = "<group>"; };
 		B54A9F742407A9F500290CAF /* IRPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IRPlayerViewController.m; sourceTree = "<group>"; };
 		B54A9F79241641B800290CAF /* FilterSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterSelectionView.m; sourceTree = "<group>"; };
@@ -620,6 +620,12 @@
 		B5BA3ED7241F1E920006D465 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		B5BA3ED8241F1E920006D465 /* License.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = License.txt; sourceTree = "<group>"; };
 		B5BA3ED9241F1E920006D465 /* .travis.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .travis.yml; sourceTree = "<group>"; };
+		B5BA5607248DE21000F740DC /* StickerSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StickerSelectionView.h; sourceTree = "<group>"; };
+		B5BA5608248DE21000F740DC /* StickerSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StickerSelectionView.m; sourceTree = "<group>"; };
+		B5BA560D248DE26E00F740DC /* StickerCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StickerCell.h; sourceTree = "<group>"; };
+		B5BA560E248DE26E00F740DC /* StickerCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StickerCell.m; sourceTree = "<group>"; };
+		B5BA5610248DE48300F740DC /* Sticker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Sticker.h; sourceTree = "<group>"; };
+		B5BA5611248DE48300F740DC /* Sticker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sticker.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -695,6 +701,7 @@
 		B54A9F5E24079C1200290CAF /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B5BA5606248DE1DB00F740DC /* StickerView */,
 				B54A9F78241641AD00290CAF /* FilterView */,
 				B54A9F6224079C3B00290CAF /* GPUView */,
 				B54A9F732407A9F500290CAF /* IRPlayerViewController.h */,
@@ -712,8 +719,6 @@
 				B572FAE72418C5B40055E17F /* IROutput.m */,
 				B54A9F632407A6E800290CAF /* WorkView.h */,
 				B54A9F642407A6E900290CAF /* WorkView.m */,
-				B54A9F712407A75F00290CAF /* Sticker.h */,
-				B54A9F702407A75F00290CAF /* Sticker.m */,
 				B5B25ADC242204760014316B /* IRGPUPreview.h */,
 				B5B25ADD242204760014316B /* IRGPUPreview.m */,
 			);
@@ -1163,6 +1168,19 @@
 			path = Framework;
 			sourceTree = "<group>";
 		};
+		B5BA5606248DE1DB00F740DC /* StickerView */ = {
+			isa = PBXGroup;
+			children = (
+				B5BA5607248DE21000F740DC /* StickerSelectionView.h */,
+				B5BA5608248DE21000F740DC /* StickerSelectionView.m */,
+				B5BA560D248DE26E00F740DC /* StickerCell.h */,
+				B5BA560E248DE26E00F740DC /* StickerCell.m */,
+				B5BA5610248DE48300F740DC /* Sticker.h */,
+				B5BA5611248DE48300F740DC /* Sticker.m */,
+			);
+			path = StickerView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1316,6 +1334,7 @@
 				B5BA3F55241F1E920006D465 /* GPUImageSmoothToonFilter.m in Sources */,
 				B5BA3F61241F1E920006D465 /* GPUImageMonochromeFilter.m in Sources */,
 				B5BA3F64241F1E920006D465 /* GPUImageClosingFilter.m in Sources */,
+				B5BA5609248DE21000F740DC /* StickerSelectionView.m in Sources */,
 				B5BA3EF6241F1E920006D465 /* GPUImageMovie.m in Sources */,
 				B5BA3F25241F1E920006D465 /* GPUImageLineGenerator.m in Sources */,
 				B5BA3F2C241F1E920006D465 /* GPUImageDirectionalSobelEdgeDetectionFilter.m in Sources */,
@@ -1388,8 +1407,10 @@
 				B5BA3F5F241F1E920006D465 /* GPUImageRGBErosionFilter.m in Sources */,
 				B5BA3F66241F1E920006D465 /* GPUImageLinearBurnBlendFilter.m in Sources */,
 				B5BA3F09241F1E920006D465 /* GPUImageBilateralFilter.m in Sources */,
+				B5BA560F248DE26E00F740DC /* StickerCell.m in Sources */,
 				B5BA3F6B241F1E920006D465 /* GPUImageTwoInputCrossTextureSamplingFilter.m in Sources */,
 				B5BA3F70241F1E920006D465 /* GPUImagePerlinNoiseFilter.m in Sources */,
+				B5BA5612248DE48300F740DC /* Sticker.m in Sources */,
 				B5BA3F84241F1E920006D465 /* GPUImageBulgeDistortionFilter.m in Sources */,
 				B5BA3F7D241F1E920006D465 /* GPUImageMosaicFilter.m in Sources */,
 				B5BA3F74241F1E920006D465 /* GPUImageAddBlendFilter.m in Sources */,
@@ -1479,7 +1500,6 @@
 				B5BA3EE1241F1E920006D465 /* GPUImageUnsharpMaskFilter.m in Sources */,
 				B5BA3F75241F1E920006D465 /* GPUImageNormalBlendFilter.m in Sources */,
 				B5BA3F30241F1E920006D465 /* GPUImageFilterPipeline.m in Sources */,
-				B54A9F722407A75F00290CAF /* Sticker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
