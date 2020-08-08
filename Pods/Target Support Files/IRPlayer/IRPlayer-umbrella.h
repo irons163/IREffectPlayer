@@ -105,6 +105,7 @@
 #import "IRYUVTools.h"
 #import "IRPlayerAction.h"
 #import "IRPlayerDecoder.h"
+#import "IRPlayerImp+Private.h"
 #import "IRPlayerImp.h"
 #import "IRPlayerTrack.h"
 #import "IRPLFImage.h"

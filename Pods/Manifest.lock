@@ -3,7 +3,7 @@ PODS:
   - IRFFMpeg (4.2.19):
     - IRFFMpeg/FFMpegLib (= 4.2.19)
   - IRFFMpeg/FFMpegLib (4.2.19)
-  - IRPlayer (0.3.5):
+  - IRPlayer (0.3.6):
     - IRFFMpeg
   - IRSticker (0.1.0)
 
@@ -25,7 +25,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   FLAnimatedImage: 4a0b56255d9b05f18b6dd7ee06871be5d3b89e31
   IRFFMpeg: 50e159994f9c7c1136b19fc1dea96b4c903b1c9c
-  IRPlayer: 07a1888e7ed8dca4512d318b82eacd93d0ae1a8e
+  IRPlayer: c4117459d06889b92d52ae26e84be4d07a4efb36
   IRSticker: c14ebee8b0108e97d81fccfbd7076d5564c5f8d4
 
 PODFILE CHECKSUM: ad56a5fe621a697d079c56527ec499e7b57fc026
