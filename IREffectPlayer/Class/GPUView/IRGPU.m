@@ -8,8 +8,8 @@
 
 #import "IRGPU.h"
 #import <objc/runtime.h>
-#import <FLAnimatedImageView.h>
-#import <FLAnimatedImage.h>
+#import "FLAnimatedImageView.h"
+#import "FLAnimatedImage.h"
 #import "GPUImageCropFilter.h"
 #import "GPUImageAlphaBlendFilter.h"
 #import "GPUImageNormalBlendFilter.h"
@@ -17,7 +17,10 @@
 #import <IRGLProgram2D.h>
 
 //@implementation IRGLView(AA)
-@implementation IRGPU
+@implementation IRGPU {
+    NSTimeInterval _lastTime;
+    NSTimeInterval _currentTime;
+}
 
 static GLfloat imageVertices[8];
 
@@ -257,7 +260,7 @@ static void *scissorRectKey = &scissorRectKey;
     
     FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
     gifImageView.frame                = CGRectMake(200.0, 50.0, 80.0f, 160.0f);
-    NSData   *gifImageData             = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"Jerry Chen_20171120_174247_1"] ofType:@"gif" inDirectory:nil]];
+    NSData   *gifImageData             = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"fatdog-dog"] ofType:@"gif" inDirectory:nil]];
     FLAnimatedImage* animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
     [gifImageView setAnimatedImage:animatedImage];
     gifImageView.backgroundColor = [UIColor clearColor];
@@ -298,15 +301,15 @@ static void *scissorRectKey = &scissorRectKey;
                     
                     // 与上一帧的间隔
                     NSTimeInterval interval = 0;
-                    //            if (CMTIME_IS_VALID(_lastTime)) {
-                    //                interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
-                    //            }
-            //        _currentTime = [[NSDate date] timeIntervalSince1970];
-            //        if(_lastTime != 0){
-            //            interval = _currentTime - _lastTime;
-            //        }
-            //        _lastTime = _currentTime;
-                    interval = 0.1;
+//                                if (CMTIME_IS_VALID(_lastTime)) {
+//                                    interval = CMTimeGetSeconds(CMTimeSubtract(_currentTime, _lastTime));
+//                                }
+                    _currentTime = [[NSDate date] timeIntervalSince1970];
+                    if(_lastTime != 0){
+                        interval = _currentTime - _lastTime;
+                    }
+                    _lastTime = _currentTime;
+//                    interval = 0.1;
                     [gifImageView nextFrameIndexForInterval:interval];
                     [gifImageView2 nextFrameIndexForInterval:interval];
                     [weakUIElementInput update];

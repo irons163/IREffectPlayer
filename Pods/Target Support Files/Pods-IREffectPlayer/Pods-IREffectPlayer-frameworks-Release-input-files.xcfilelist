@@ -1,5 +1,4 @@
 ${PODS_ROOT}/Target Support Files/Pods-IREffectPlayer/Pods-IREffectPlayer-frameworks.sh
-${BUILT_PRODUCTS_DIR}/FLAnimatedImage/FLAnimatedImage.framework
 ${BUILT_PRODUCTS_DIR}/IRFFMpeg/IRFFMpeg.framework
 ${BUILT_PRODUCTS_DIR}/IRPlayer/IRPlayer.framework
 ${BUILT_PRODUCTS_DIR}/IRSticker/IRSticker.framework
