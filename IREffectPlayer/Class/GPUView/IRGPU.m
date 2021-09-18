@@ -214,8 +214,14 @@ static void *scissorRectKey = &scissorRectKey;
     }];
     
     if (self.temp) {
-//        [self.temp setFrame:self.irOutput.viewprotRange];
-        [self.temp setFrame:self.frame];
+        CGRect r = self.irOutput.viewprotRange;
+        r.size.height = r.size.height / 2;
+        r.size.width = r.size.width / 2;
+
+//        r.size.height = r.size.height * 3;
+//        r.size.width = r.size.width * 2;
+        [self.temp setFrame:r];
+//        [self.temp setFrame:self.frame];
 //        self.temp.widthAnchor.
 //        [self.temp.widthAnchor constraintEqualToConstant:self.frame.size.width].active = YES;
 //        [self.temp.heightAnchor constraintEqualToConstant:self.frame.size.height].active = YES;
@@ -224,8 +230,8 @@ static void *scissorRectKey = &scissorRectKey;
     
     NSDate *startTime = [NSDate date];
     
-//    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
-    self.temp = [[WorkView alloc] initWithFrame:self.frame];
+    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+//    self.temp = [[WorkView alloc] initWithFrame:self.frame];
 //    self.temp.translatesAutoresizingMaskIntoConstraints = NO;
 //    [self.temp.widthAnchor constraintEqualToConstant:self.frame.size.width].active = YES;
 //    [self.temp.heightAnchor constraintEqualToConstant:self.frame.size.height].active = YES;

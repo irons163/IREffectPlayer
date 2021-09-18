@@ -70,7 +70,7 @@
 - (void)viewDidLayoutSubviews
 {
     [super viewDidLayoutSubviews];
-//    [self.player updateGraphicsViewFrame:self.view.bounds];
+    [self.player updateGraphicsViewFrame:self.view.bounds];
 //    [((IRGPU *)self.player.view) updateSize];
 //    [((IRGPU *)self.player.view) setRenderModes:nil];
 }
@@ -102,6 +102,7 @@
 //    
 //    [(IRGPU *)self.player.view setOutput:i];
 //    [self.mainView addSubview:i];
+    [((IRGPU *)self.player.view) updateSize];
     WorkView *workView = [[WorkView alloc] initWithFrame:self.mainView.bounds];
     workView.delegate = self;
     workView.drawView = ((IRGPU *)self.player.view).temp;
