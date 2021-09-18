@@ -27,7 +27,7 @@
     
     UITabBarController *desVC;
     
-//    VCIPCamSession* session;
+    //    VCIPCamSession* session;
 }
 
 @property (weak, nonatomic) IBOutlet UIView *mainView;
@@ -43,19 +43,19 @@
 + (void)load {
     SEL sel = sel_getUid("createGLView");
     Class IDEIndexClangQueryProviderClass = NSClassFromString(@"IRPlayerImp");
-
+    
     Method method = class_getInstanceMethod(IDEIndexClangQueryProviderClass, sel);
     IMP originalImp = method_getImplementation(method);
-
+    
     IMP imp = imp_implementationWithBlock(^id(id me) {
-//        id ret = ((id (*)(id,SEL))originalImp)(me, sel);
-
+        //        id ret = ((id (*)(id,SEL))originalImp)(me, sel);
+        
         // do work
         id ret = [[IRGPU alloc] init];
-
+        
         return ret;
     });
-
+    
     method_setImplementation(method, imp);
 }
 
@@ -71,8 +71,8 @@
 {
     [super viewDidLayoutSubviews];
     [self.player updateGraphicsViewFrame:self.view.bounds];
-//    [((IRGPU *)self.player.view) updateSize];
-//    [((IRGPU *)self.player.view) setRenderModes:nil];
+    //    [((IRGPU *)self.player.view) updateSize];
+    //    [((IRGPU *)self.player.view) setRenderModes:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -98,17 +98,17 @@
     self.player.decoder = [IRPlayerDecoder FFmpegDecoder];
     [self.mainView insertSubview:self.player.view atIndex:0];
     [self.player replaceVideoWithURL:normalVideo];
-//    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
-//    
-//    [(IRGPU *)self.player.view setOutput:i];
-//    [self.mainView addSubview:i];
+    //    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
+    //
+    //    [(IRGPU *)self.player.view setOutput:i];
+    //    [self.mainView addSubview:i];
     [((IRGPU *)self.player.view) updateSize];
     WorkView *workView = [[WorkView alloc] initWithFrame:self.mainView.bounds];
     workView.delegate = self;
     workView.drawView = ((IRGPU *)self.player.view).temp;
     workView.drawView.delegate = self;
     [self.mainView addSubview:workView];
-//    [self.mainView addSubview:workView.drawView];
+    //    [self.mainView addSubview:workView.drawView];
     self.workView = workView;
     self.drawView = workView.drawView;
 }
@@ -149,16 +149,16 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     desVC = segue.destinationViewController;
-//    if ([[segue identifier] isEqual:@"toWorkView"]){
-//        self.workView = (WorkView *)desVC.view;
-//        return;
-//    }
+    //    if ([[segue identifier] isEqual:@"toWorkView"]){
+    //        self.workView = (WorkView *)desVC.view;
+    //        return;
+    //    }
     if ([[segue identifier] isEqual:@"toStickerSelectionView"]){
-//        desVC.selectedIndex = 0;
-//        self.stickerSelectionView = (StickerSelectionView *)desVC.selectedViewController.view;
-//        self.stickerSelectionView.selectStickerSuccessBlock = ^(Sticker *sticker){
-//            self.pickStickerSuccessBlock(sticker);
-//        };
+        //        desVC.selectedIndex = 0;
+        //        self.stickerSelectionView = (StickerSelectionView *)desVC.selectedViewController.view;
+        //        self.stickerSelectionView.selectStickerSuccessBlock = ^(Sticker *sticker){
+        //            self.pickStickerSuccessBlock(sticker);
+        //        };
         return;
     }
 }
@@ -204,21 +204,6 @@
 
 #pragma mark - IBAction
 
-- (IBAction)effectiveButtonClick:(id)sender {
-    ((UIButton*)sender).selected = !((UIButton*)sender).selected;
-    BOOL isSelected = ((UIButton*)sender).selected;
-    
-    [self handleModeSelect:isSelected];
-    
-    [self stickerModeClick:stickerModeButton];
-}
-
-- (IBAction)editModeClick:(id)sender {
-    ((UIButton*)sender).selected = !((UIButton*)sender).selected;
-    self.workView.enableEditing = ((UIButton*)sender).selected;
-    self.drawView.enableEditing = ((UIButton*)sender).selected;
-}
-
 - (void)handleModeSelect:(BOOL)isSelected {
     if(isSelected){
         stickerSelectionBoard.hidden = !isSelected;
@@ -237,6 +222,21 @@
     }];
 }
 
+- (IBAction)effectiveButtonClick:(id)sender {
+    ((UIButton*)sender).selected = !((UIButton*)sender).selected;
+    BOOL isSelected = ((UIButton*)sender).selected;
+    
+    [self handleModeSelect:isSelected];
+    
+    [self stickerModeClick:stickerModeButton];
+}
+
+- (IBAction)editModeClick:(id)sender {
+    ((UIButton*)sender).selected = !((UIButton*)sender).selected;
+    self.workView.enableEditing = ((UIButton*)sender).selected;
+    self.drawView.enableEditing = ((UIButton*)sender).selected;
+}
+
 - (IBAction)stickerModeClick:(id)sender {
     ((UIButton*)sender).selected = !((UIButton*)sender).selected;
     BOOL isSelected = ((UIButton*)sender).selected;
@@ -248,7 +248,7 @@
         
         ((StickerSelectionView *)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(Sticker *sticker){
             //            self.pickStickerSuccessBlock(sticker);
-//            [((IRGPU *)self.player.view) addFilter:filter.filter];
+            //            [((IRGPU *)self.player.view) addFilter:filter.filter];
             [self.workView addSticker:sticker];
         };
         
@@ -275,6 +275,7 @@
         faceModeButton.selected = !isSelected;
     }
 }
+
 - (IBAction)effectModeClick:(id)sender {
     ((UIButton*)sender).selected = !((UIButton*)sender).selected;
     BOOL isSelected = ((UIButton*)sender).selected;
@@ -283,7 +284,7 @@
         stickerSelectionBoard.hidden = !isSelected;
     }
     
-//    stickerSelectionBoard.userInteractionEnabled = NO;
+    //    stickerSelectionBoard.userInteractionEnabled = NO;
     
     if(isSelected){
         desVC.selectedIndex = 1;

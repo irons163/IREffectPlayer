@@ -10,15 +10,13 @@
 
 @implementation IROutput
 
--(void) setOutputFramebuffer:(GPUImageFramebuffer *)outputFramebuffer{
+- (void)setOutputFramebuffer:(GPUImageFramebuffer *)outputFramebuffer {
     self->outputFramebuffer = outputFramebuffer;
 }
 
-- (void)processProgram
-{
+- (void)processProgram {
     runSynchronouslyOnVideoProcessingQueue(^{
-        for (id<GPUImageInput> currentTarget in targets)
-        {
+        for (id<GPUImageInput> currentTarget in targets) {
             NSInteger indexOfObject = [targets indexOfObject:currentTarget];
             NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
             
@@ -29,11 +27,9 @@
     });
 }
 
-- (void)processProgramWithTimestamp:(CMTime)frameTime
-{
+- (void)processProgramWithTimestamp:(CMTime)frameTime {
     runSynchronouslyOnVideoProcessingQueue(^{
-        for (id<GPUImageInput> currentTarget in targets)
-        {
+        for (id<GPUImageInput> currentTarget in targets) {
             NSInteger indexOfObject = [targets indexOfObject:currentTarget];
             NSInteger targetTextureIndex = [[targetTextureIndices objectAtIndex:indexOfObject] integerValue];
             

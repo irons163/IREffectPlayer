@@ -23,6 +23,7 @@
 - (void)addSticker:(Sticker *)sticker;
 
 - (void)generateWithBlock:(void(^)(UIImage *finalImage, NSError *error))block;
+
 @end
 
 @protocol WorkViewDelegate <NSObject>

@@ -16,9 +16,6 @@
 		B54A9F552406A07100290CAF /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F542406A07100290CAF /* main.m */; };
 		B54A9F6124079C2400290CAF /* IRGPU.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F5F24079C2400290CAF /* IRGPU.m */; };
 		B54A9F652407A6E900290CAF /* WorkView.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F642407A6E900290CAF /* WorkView.m */; };
-		B54A9F6D2407A74000290CAF /* StickerView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B54A9F682407A74000290CAF /* StickerView.bundle */; };
-		B54A9F6E2407A74000290CAF /* SingleHandGestureRecognizer.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F6B2407A74000290CAF /* SingleHandGestureRecognizer.m */; };
-		B54A9F6F2407A74000290CAF /* StickerView.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F6C2407A74000290CAF /* StickerView.m */; };
 		B54A9F762407A9F500290CAF /* IRPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F742407A9F500290CAF /* IRPlayerViewController.m */; };
 		B54A9F7F241641B900290CAF /* FilterSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F79241641B800290CAF /* FilterSelectionView.m */; };
 		B54A9F80241641B900290CAF /* FilterCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B54A9F7B241641B800290CAF /* FilterCell.m */; };
@@ -241,11 +238,6 @@
 		B54A9F6024079C2400290CAF /* IRGPU.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRGPU.h; sourceTree = "<group>"; };
 		B54A9F632407A6E800290CAF /* WorkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkView.h; sourceTree = "<group>"; };
 		B54A9F642407A6E900290CAF /* WorkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkView.m; sourceTree = "<group>"; };
-		B54A9F682407A74000290CAF /* StickerView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = StickerView.bundle; sourceTree = "<group>"; };
-		B54A9F692407A74000290CAF /* StickerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StickerView.h; sourceTree = "<group>"; };
-		B54A9F6A2407A74000290CAF /* SingleHandGestureRecognizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SingleHandGestureRecognizer.h; sourceTree = "<group>"; };
-		B54A9F6B2407A74000290CAF /* SingleHandGestureRecognizer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SingleHandGestureRecognizer.m; sourceTree = "<group>"; };
-		B54A9F6C2407A74000290CAF /* StickerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StickerView.m; sourceTree = "<group>"; };
 		B54A9F732407A9F500290CAF /* IRPlayerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = IRPlayerViewController.h; sourceTree = "<group>"; };
 		B54A9F742407A9F500290CAF /* IRPlayerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = IRPlayerViewController.m; sourceTree = "<group>"; };
 		B54A9F79241641B800290CAF /* FilterSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FilterSelectionView.m; sourceTree = "<group>"; };
@@ -739,21 +731,8 @@
 			children = (
 				B5A76A3126F5DD4E00666F6F /* FLAnimatedImage */,
 				B5BA3D6A241F1E900006D465 /* GPUImage */,
-				B54A9F672407A74000290CAF /* StickerView-Framework */,
 			);
 			path = Utility;
-			sourceTree = "<group>";
-		};
-		B54A9F672407A74000290CAF /* StickerView-Framework */ = {
-			isa = PBXGroup;
-			children = (
-				B54A9F682407A74000290CAF /* StickerView.bundle */,
-				B54A9F692407A74000290CAF /* StickerView.h */,
-				B54A9F6A2407A74000290CAF /* SingleHandGestureRecognizer.h */,
-				B54A9F6B2407A74000290CAF /* SingleHandGestureRecognizer.m */,
-				B54A9F6C2407A74000290CAF /* StickerView.m */,
-			);
-			path = "StickerView-Framework";
 			sourceTree = "<group>";
 		};
 		B54A9F78241641AD00290CAF /* FilterView */ = {
@@ -1271,7 +1250,6 @@
 				B54A9F4F2406A07100290CAF /* Assets.xcassets in Resources */,
 				B5A76A2426F5C52E00666F6F /* fatdog-dog.gif in Resources */,
 				B5BA3EDB241F1E920006D465 /* lookup_soft_elegance_1.png in Resources */,
-				B54A9F6D2407A74000290CAF /* StickerView.bundle in Resources */,
 				B5BA3EDE241F1E920006D465 /* lookup_miss_etikate.png in Resources */,
 				B54A9F4D2406A06F00290CAF /* Main.storyboard in Resources */,
 				B572FAE3241775970055E17F /* i-see-fire.mp4 in Resources */,
@@ -1390,7 +1368,6 @@
 				B5BA3F5E241F1E920006D465 /* GPUImageRawDataInput.m in Sources */,
 				B5BA3EEE241F1E920006D465 /* GPUImageHighlightShadowTintFilter.m in Sources */,
 				B5BA3F53241F1E920006D465 /* GPUImageRawDataOutput.m in Sources */,
-				B54A9F6F2407A74000290CAF /* StickerView.m in Sources */,
 				B5BA3F6E241F1E920006D465 /* GPUImagePrewittEdgeDetectionFilter.m in Sources */,
 				B5BA3F2D241F1E920006D465 /* GPUImagePosterizeFilter.m in Sources */,
 				B5BA3EED241F1E920006D465 /* GPUImageColorPackingFilter.m in Sources */,
@@ -1411,7 +1388,6 @@
 				B5BA3F56241F1E920006D465 /* GPUImageVoronoiConsumerFilter.m in Sources */,
 				B5BA3F62241F1E920006D465 /* GPUImageHoughTransformLineDetector.m in Sources */,
 				B5BA3F01241F1E920006D465 /* GPUImageSketchFilter.m in Sources */,
-				B54A9F6E2407A74000290CAF /* SingleHandGestureRecognizer.m in Sources */,
 				B5BA3F26241F1E920006D465 /* GLProgram.m in Sources */,
 				B5BA3F1E241F1E920006D465 /* GPUImageCropFilter.m in Sources */,
 				B5BA3F1F241F1E920006D465 /* GPUImagePixellateFilter.m in Sources */,

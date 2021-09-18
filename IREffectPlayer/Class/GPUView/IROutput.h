@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) CGRect viewprotRange;
 
--(void) setOutputFramebuffer:(GPUImageFramebuffer *)outputFramebuffer;
+- (void)setOutputFramebuffer:(GPUImageFramebuffer *)outputFramebuffer;
 - (void)processProgram;
 
 @end

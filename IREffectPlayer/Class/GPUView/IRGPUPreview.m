@@ -15,8 +15,7 @@
 #pragma mark -
 #pragma mark GPUInput protocol
 
-- (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex;
-{
+- (void)newFrameReadyAtTime:(CMTime)frameTime atIndex:(NSInteger)textureIndex {
     [super newFrameReadyAtTime:frameTime atIndex:textureIndex];
     
 //    if(self.VCSessionFrameDelegate){
@@ -31,8 +30,7 @@
 //    [inputFramebuffer restoreRenderTarget];
 }
 
-- (void)setInputFramebuffer:(GPUImageFramebuffer *)newInputFramebuffer atIndex:(NSInteger)textureIndex;
-{
+- (void)setInputFramebuffer:(GPUImageFramebuffer *)newInputFramebuffer atIndex:(NSInteger)textureIndex {
     [super setInputFramebuffer:newInputFramebuffer atIndex:textureIndex];
     inputFramebuffer = newInputFramebuffer;
 }

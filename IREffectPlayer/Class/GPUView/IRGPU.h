@@ -10,7 +10,7 @@
 #import <IRPlayer/IRPlayer.h>
 #import <IRPlayer/IRGLView.h>
 #import "WorkView.h"
-#import "StickerView.h"
+#import <IRSticker/IRSticker.h>
 #import "GPUImageContext.h"
 #import "GPUImageUIElement.h"
 #import "GPUImageFilter.h"
@@ -49,7 +49,7 @@
 
 //- (void)setup;
 - (void)updateSize;
-- (void)updateStickViews:(NSArray<StickerView*>*)stickViews;
+- (void)updateStickViews:(NSArray<IRStickerView *> *)stickViews;
 
 //- (GPUImageFilter*)getFilter;
 //- (void)setFilter:(GPUImageOutput<GPUImageInput>*)filter;

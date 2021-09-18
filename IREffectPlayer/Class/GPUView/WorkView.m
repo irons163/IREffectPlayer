@@ -7,11 +7,11 @@
 //
 
 #import "WorkView.h"
-#import "StickerView.h"
+#import <IRSticker/IRSticker.h>
 
 #import "Sticker.h"
 
-@interface WorkView()<StickerViewDelegate>
+@interface WorkView()<IRStickerViewDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *baseImageView;
 
 @property (strong, nonatomic) UIImage *baseImage;
@@ -48,7 +48,7 @@
 
 #pragma mark - base image
 
-- (void)setBaseImage:(UIImage *)baseImage{
+- (void)setBaseImage:(UIImage *)baseImage {
     [self clearStickers];
     _baseImage = baseImage;
     self.baseImageView.image = baseImage;
@@ -56,16 +56,16 @@
 
 #pragma mark - sticker
 
-- (void)addSticker:(Sticker *)sticker{
+- (void)addSticker:(Sticker *)sticker {
     [self hideAllStickerEditing];
-    StickerView *newStickerView = [[StickerView alloc] initWithContentFrame:CGRectMake(0, 0, sticker.image.size.width, sticker.image.size.height) Sticker:sticker];
+    IRStickerView *newStickerView = [[IRStickerView alloc] initWithContentFrame:CGRectMake(0, 0, sticker.image.size.width, sticker.image.size.height) contentImage:sticker.image];
     newStickerView.delegate = self;
     [self.stickerViewArray addObject:newStickerView];
     [self addSubview:newStickerView];
 }
 
-- (void)clearStickers{
-    for (StickerView *stickerView in self.stickerViewArray){
+- (void)clearStickers {
+    for (IRStickerView *stickerView in self.stickerViewArray){
         [stickerView removeFromSuperview];
     }
     [self.stickerViewArray removeAllObjects];
@@ -79,7 +79,7 @@
 }
 
 -(void)hideAllStickerEditing{
-    for (StickerView *stickerView in self.stickerViewArray){
+    for (IRStickerView *stickerView in self.stickerViewArray){
         if(![stickerView enabledBorder]){
             continue;
         }
@@ -97,8 +97,8 @@
 
 #pragma mark - Sticker view delegte
 
--(void)stickerViewDidTapContentView:(StickerView *)sticker{
-    for (StickerView *stickerView in self.stickerViewArray){
+-(void)stickerViewDidTapContentView:(IRStickerView *)sticker {
+    for (IRStickerView *stickerView in self.stickerViewArray){
         if (stickerView == sticker){
             continue;
         }
@@ -129,7 +129,7 @@
 //    }
 //}
 
--(void)stickerViewDidEndEditing:(StickerView *)stickerView{
+-(void)stickerViewDidEndEditing:(IRStickerView *)stickerView{
     [stickerView setEnabledControl:NO];
     [stickerView setEnabledBorder:NO];
     
@@ -144,7 +144,7 @@
 //    [stickerView setEnabledBorder:NO];
 //}
 
-- (void)stickerViewDidClose:(StickerView *)sticker{
+- (void)stickerViewDidClose:(IRStickerView *)sticker {
     [self.stickerViewArray removeObject:sticker];
 }
 
@@ -158,8 +158,8 @@
 
 #pragma mark - generate
 
-- (void)generateWithBlock:(void (^)(UIImage *, NSError *))block{
-    for (StickerView *stickerView in self.stickerViewArray){
+- (void)generateWithBlock:(void (^)(UIImage *, NSError *))block {
+    for (IRStickerView *stickerView in self.stickerViewArray){
         [stickerView setEnabledControl:NO];
         [stickerView setEnabledBorder:NO];
     }
@@ -167,7 +167,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     
     [self.baseImage drawInRect:self.bounds];
-    for (StickerView *stickerView in self.stickerViewArray) {
+    for (IRStickerView *stickerView in self.stickerViewArray) {
         CGContextSaveGState(context);
         // Generate pure imageview
 //        UIImage *image = [(UIImageView *)stickerView.contentView image];
@@ -194,12 +194,10 @@
     block(ret, nil);
 }
 
--(UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event{
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
     if ([self pointInside:point withEvent:event]) {
         
     if(self.enableEditing && _drawView){
-//        CGPoint convertedPoint = [_drawView convertPoint:point fromView:self];
-//        return [_drawView hitTest:convertedPoint withEvent:event];
         UIView *hitTestView = nil;
         for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
             CGPoint convertedPoint = [subview convertPoint:point fromView:self];
@@ -214,12 +212,10 @@
             return hitTestView;
         }
 
-//        return [super hitTest:point withEvent:event];
         [self hideAllStickerEditing];
         
         return nil;
     }
-//    else if(self.enableEditing){
         for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
             CGPoint convertedPoint = [subview convertPoint:point fromView:self];
             UIView *hitTestView = [subview hitTest:convertedPoint withEvent:event];
@@ -227,11 +223,8 @@
                 return hitTestView;
             }
         }
-         [self hideAllStickerEditing];
+        [self hideAllStickerEditing];
         return nil;
-//    }
-//
-//    return [super hitTest:point withEvent:event];
     }
     return nil;
 }
