@@ -8,15 +8,19 @@
 
 #import "WorkView.h"
 #import <IRSticker/IRSticker.h>
+#import "GifModel.h"
 
 #import "Sticker.h"
+#import "FLAnimatedImageView.h"
 
 @interface WorkView()<IRStickerViewDelegate>
+
 @property (weak, nonatomic) IBOutlet UIImageView *baseImageView;
 
 @property (strong, nonatomic) UIImage *baseImage;
 
 @property (strong, nonatomic) NSMutableArray *stickerViewArray;
+
 @end
 
 @implementation WorkView
@@ -65,10 +69,31 @@
 }
 
 - (void)clearStickers {
-    for (IRStickerView *stickerView in self.stickerViewArray){
-        [stickerView removeFromSuperview];
+    for (UIView *view in self.stickerViewArray){
+        [view removeFromSuperview];
     }
     [self.stickerViewArray removeAllObjects];
+}
+
+- (void)addGifModel:(GifModel *)gifModel {
+    [self hideAllStickerEditing];
+    
+    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
+    gifImageView.frame = CGRectMake(0, 0, gifModel.image.size.width, gifModel.image.size.height);
+    [gifImageView setAnimatedImage:gifModel.image];
+    gifImageView.backgroundColor = [UIColor clearColor];
+    [gifImageView startAnimating];
+    [self.stickerViewArray addObject:gifImageView];
+    [self addSubview:gifImageView];
+}
+
+- (void)nextFrameIndexForInterval:(NSTimeInterval)interval {
+    for (UIView *v in self.subviews) {
+        if ([v isKindOfClass:FLAnimatedImageView.class]) {
+            FLAnimatedImageView *gifImageView = v;
+            [gifImageView nextFrameIndexForInterval:interval];
+        }
+    }
 }
 
 #pragma mark - touch
@@ -78,19 +103,25 @@
     
 }
 
--(void)hideAllStickerEditing{
-    for (IRStickerView *stickerView in self.stickerViewArray){
-        if(![stickerView enabledBorder]){
-            continue;
+- (void)hideAllStickerEditing {
+    for (UIView *view in self.stickerViewArray){
+        if ([view isKindOfClass:IRStickerView.class]) {
+            IRStickerView *stickerView = view;
+            if(![stickerView enabledBorder]){
+                continue;
+            }
+                
+            //        [stickerView hideEditingHandles];
+            [stickerView setEnabledControl:NO];
+            [stickerView setEnabledBorder:NO];
+        } else if ([view isKindOfClass:FLAnimatedImageView.class]) {
+            if (view.superview != self) {
+                continue;
+            }
         }
-            
-        //        [stickerView hideEditingHandles];
-        [stickerView setEnabledControl:NO];
-        [stickerView setEnabledBorder:NO];
         
-        if ([self.delegate respondsToSelector:@selector(hideEditingHandles:)])
-        {
-            [self.delegate hideEditingHandles:stickerView];
+        if ([self.delegate respondsToSelector:@selector(hideEditingHandles:)]) {
+            [self.delegate hideEditingHandles:view];
         }
     }
 }
@@ -215,7 +246,7 @@
         [self hideAllStickerEditing];
         
         return nil;
-    }
+    } else {
         for (UIView *subview in [self.subviews reverseObjectEnumerator]) {
             CGPoint convertedPoint = [subview convertPoint:point fromView:self];
             UIView *hitTestView = [subview hitTest:convertedPoint withEvent:event];
@@ -225,6 +256,8 @@
         }
         [self hideAllStickerEditing];
         return nil;
+    }
+        
     }
     return nil;
 }

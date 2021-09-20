@@ -213,23 +213,23 @@ static GLfloat imageVertices[8];
     imageView.backgroundColor = [UIColor clearColor];
     [self.temp addSubview:imageView];
     
-    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
-    gifImageView.frame = CGRectMake(200.0, 50.0, 80.0f, 160.0f);
-    NSData *gifImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"fatdog-dog"] ofType:@"gif" inDirectory:nil]];
-    FLAnimatedImage* animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
-    [gifImageView setAnimatedImage:animatedImage];
-    gifImageView.backgroundColor = [UIColor clearColor];
-    [self.temp addSubview:gifImageView];
-    [gifImageView startAnimating];
+//    FLAnimatedImageView *gifImageView = [[FLAnimatedImageView alloc] init];
+//    gifImageView.frame = CGRectMake(200.0, 50.0, 80.0f, 160.0f);
+//    NSData *gifImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"fatdog-dog"] ofType:@"gif" inDirectory:nil]];
+//    FLAnimatedImage* animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
+//    [gifImageView setAnimatedImage:animatedImage];
+//    gifImageView.backgroundColor = [UIColor clearColor];
+//    [self.temp addSubview:gifImageView];
+//    [gifImageView startAnimating];
     
-    FLAnimatedImageView *gifImageView2 = [[FLAnimatedImageView alloc] init];
-    gifImageView2.frame = CGRectMake(200.0, 50.0, 80.0f, 20.0f);
-    gifImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"loading_blue"] ofType:@"gif" inDirectory:nil]];
-    animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
-    [gifImageView2 setAnimatedImage:animatedImage];
-    gifImageView2.backgroundColor = [UIColor clearColor];
-    [self.temp addSubview:gifImageView2];
-    [gifImageView2 startAnimating];
+//    FLAnimatedImageView *gifImageView2 = [[FLAnimatedImageView alloc] init];
+//    gifImageView2.frame = CGRectMake(200.0, 50.0, 80.0f, 20.0f);
+//    gifImageData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:[NSString stringWithFormat:@"loading_blue"] ofType:@"gif" inDirectory:nil]];
+//    animatedImage = [[FLAnimatedImage alloc] initWithAnimatedGIFData:gifImageData];
+//    [gifImageView2 setAnimatedImage:animatedImage];
+//    gifImageView2.backgroundColor = [UIColor clearColor];
+//    [self.temp addSubview:gifImageView2];
+//    [gifImageView2 startAnimating];
     
     self.uiElementInput = [[GPUImageUIElement alloc] initWithView:self.temp];
     
@@ -256,8 +256,9 @@ static GLfloat imageVertices[8];
             }
             _lastTime = _currentTime;
             //                    interval = 0.1;
-            [gifImageView nextFrameIndexForInterval:interval];
-            [gifImageView2 nextFrameIndexForInterval:interval];
+//            [gifImageView nextFrameIndexForInterval:interval];
+//            [gifImageView2 nextFrameIndexForInterval:interval];
+            [self.temp nextFrameIndexForInterval:interval];
             [weakUIElementInput update];
         });
         

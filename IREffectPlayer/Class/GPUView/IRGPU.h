@@ -55,7 +55,8 @@
 //- (void)setFilter:(GPUImageOutput<GPUImageInput>*)filter;
 //- (void)setOutput:(GPUImageView *)output;
 - (void)setOutput:(IRGLView *)output;
--(void)addFilter:(GPUImageOutput<GPUImageInput>*)filter;
+- (void)addFilter:(GPUImageOutput<GPUImageInput> *)filter;
+- (void)addFilter:(GPUImageOutput<GPUImageInput> *)filter;
 
 - (void)setCurrentContext;
 - (void)bindCurrentFramebuffer;

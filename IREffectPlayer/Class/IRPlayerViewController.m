@@ -11,13 +11,14 @@
 #import <IRPlayer/IRPlayer.h>
 #import "StickerSelectionView.h"
 #import "FilterSelectionView.h"
+#import "GifSelectionView.h"
 #import "FilterItem.h"
 #import "IRGPUPreview.h"
 #import <objc/runtime.h>
 
 @interface IRPlayerViewController ()<WorkViewDelegate> {
     __weak IBOutlet UIView *stickerSelectionBoard;
-    __weak IBOutlet UIButton *effectiveButton;
+    __weak IBOutlet UIButton *gifModeButton;
     __weak IBOutlet UIButton *stickerModeButton;
     __weak IBOutlet UIButton *filterModeButton;
     __weak IBOutlet UIButton *effectModeButton;
@@ -193,7 +194,7 @@
 
 -(void)hideEditingHandles:(UIView *)stickerView {
     [stickerView removeFromSuperview];
-    UIView * v = ((IRGPU *)self.player.view).temp;
+    WorkView * v = ((IRGPU *)self.player.view).temp;
     [v addSubview:stickerView];
 }
 
@@ -244,7 +245,7 @@
     [self handleModeSelect:isSelected];
     
     if(isSelected){
-        desVC.selectedIndex = 3;
+        desVC.selectedIndex = 0;
         
         ((StickerSelectionView *)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(Sticker *sticker){
             //            self.pickStickerSuccessBlock(sticker);
@@ -254,7 +255,7 @@
         
         filterModeButton.selected = !isSelected;
         effectModeButton.selected = !isSelected;
-        faceModeButton.selected = !isSelected;
+        gifModeButton.selected = !isSelected;
     }
 }
 
@@ -262,8 +263,10 @@
     ((UIButton*)sender).selected = !((UIButton*)sender).selected;
     BOOL isSelected = ((UIButton*)sender).selected;
     
+    [self handleModeSelect:isSelected];
+    
     if (isSelected) {
-        desVC.selectedIndex = 1;
+        desVC.selectedIndex = 2;
         
         ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
             //            self.pickStickerSuccessBlock(sticker);
@@ -272,57 +275,27 @@
         
         stickerModeButton.selected = !isSelected;
         effectModeButton.selected = !isSelected;
-        faceModeButton.selected = !isSelected;
+        gifModeButton.selected = !isSelected;
     }
 }
 
-- (IBAction)effectModeClick:(id)sender {
+- (IBAction)gifModeClick:(id)sender {
     ((UIButton*)sender).selected = !((UIButton*)sender).selected;
     BOOL isSelected = ((UIButton*)sender).selected;
     
-    if(isSelected){
-        stickerSelectionBoard.hidden = !isSelected;
-    }
-    
-    //    stickerSelectionBoard.userInteractionEnabled = NO;
+    [self handleModeSelect:isSelected];
     
     if(isSelected){
         desVC.selectedIndex = 1;
         
-        ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
-            //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) addFilter:filter.filter];
+        ((GifSelectionView *)desVC.selectedViewController.view).selectGifModelSuccessBlock = ^(GifModel * _Nonnull sticker) {
+            [self.workView addGifModel:sticker];
         };
         
         stickerModeButton.selected = !isSelected;
         filterModeButton.selected = !isSelected;
-        faceModeButton.selected = !isSelected;
-    }
-}
-
-- (IBAction)faceModeClick:(id)sender {
-    ((UIButton*)sender).selected = !((UIButton*)sender).selected;
-    BOOL isSelected = ((UIButton*)sender).selected;
-    
-    if(isSelected){
-        stickerSelectionBoard.hidden = !isSelected;
-    }
-    
-    stickerSelectionBoard.userInteractionEnabled = NO;
-    
-    if(isSelected){
-        desVC.selectedIndex = 1;
-        
-        ((FilterSelectionView*)desVC.selectedViewController.view).selectStickerSuccessBlock = ^(FilterItem *filter){
-            //            self.pickStickerSuccessBlock(sticker);
-            [((IRGPU *)self.player.view) addFilter:filter.filter];
-        };
-        
-        stickerModeButton.selected = !isSelected;
         effectModeButton.selected = !isSelected;
-        filterModeButton.selected = !isSelected;
     }
 }
-
 
 @end

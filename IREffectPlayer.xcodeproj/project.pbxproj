@@ -27,6 +27,9 @@
 		B5A76A2426F5C52E00666F6F /* fatdog-dog.gif in Resources */ = {isa = PBXBuildFile; fileRef = B5A76A2326F5C52E00666F6F /* fatdog-dog.gif */; };
 		B5A76A3626F5DD4E00666F6F /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A76A3226F5DD4E00666F6F /* FLAnimatedImage.m */; };
 		B5A76A3726F5DD4E00666F6F /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A76A3326F5DD4E00666F6F /* FLAnimatedImageView.m */; };
+		B5A76A3B26F666D900666F6F /* GifSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A76A3A26F666D900666F6F /* GifSelectionView.m */; };
+		B5A76A3E26F6670200666F6F /* GifCell.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A76A3D26F6670200666F6F /* GifCell.m */; };
+		B5A76A4126F6675200666F6F /* GifModel.m in Sources */ = {isa = PBXBuildFile; fileRef = B5A76A4026F6675200666F6F /* GifModel.m */; };
 		B5B25ADE242204760014316B /* IRGPUPreview.m in Sources */ = {isa = PBXBuildFile; fileRef = B5B25ADD242204760014316B /* IRGPUPreview.m */; };
 		B5BA3EDA241F1E920006D465 /* lookup_soft_elegance_2.png in Resources */ = {isa = PBXBuildFile; fileRef = B5BA3D6D241F1E900006D465 /* lookup_soft_elegance_2.png */; };
 		B5BA3EDB241F1E920006D465 /* lookup_soft_elegance_1.png in Resources */ = {isa = PBXBuildFile; fileRef = B5BA3D6E241F1E900006D465 /* lookup_soft_elegance_1.png */; };
@@ -256,6 +259,12 @@
 		B5A76A3326F5DD4E00666F6F /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		B5A76A3426F5DD4E00666F6F /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
 		B5A76A3526F5DD4E00666F6F /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		B5A76A3926F666D900666F6F /* GifSelectionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GifSelectionView.h; sourceTree = "<group>"; };
+		B5A76A3A26F666D900666F6F /* GifSelectionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GifSelectionView.m; sourceTree = "<group>"; };
+		B5A76A3C26F6670200666F6F /* GifCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GifCell.h; sourceTree = "<group>"; };
+		B5A76A3D26F6670200666F6F /* GifCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GifCell.m; sourceTree = "<group>"; };
+		B5A76A3F26F6675200666F6F /* GifModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GifModel.h; sourceTree = "<group>"; };
+		B5A76A4026F6675200666F6F /* GifModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GifModel.m; sourceTree = "<group>"; };
 		B5B25ADC242204760014316B /* IRGPUPreview.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IRGPUPreview.h; sourceTree = "<group>"; };
 		B5B25ADD242204760014316B /* IRGPUPreview.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IRGPUPreview.m; sourceTree = "<group>"; };
 		B5BA3D6D241F1E900006D465 /* lookup_soft_elegance_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = lookup_soft_elegance_2.png; sourceTree = "<group>"; };
@@ -702,6 +711,7 @@
 		B54A9F5E24079C1200290CAF /* Class */ = {
 			isa = PBXGroup;
 			children = (
+				B5A76A3826F6662700666F6F /* GifView */,
 				B5BA5606248DE1DB00F740DC /* StickerView */,
 				B54A9F78241641AD00290CAF /* FilterView */,
 				B54A9F6224079C3B00290CAF /* GPUView */,
@@ -758,6 +768,19 @@
 			);
 			name = FLAnimatedImage;
 			path = FLAnimatedImage/FLAnimatedImage;
+			sourceTree = "<group>";
+		};
+		B5A76A3826F6662700666F6F /* GifView */ = {
+			isa = PBXGroup;
+			children = (
+				B5A76A3926F666D900666F6F /* GifSelectionView.h */,
+				B5A76A3A26F666D900666F6F /* GifSelectionView.m */,
+				B5A76A3C26F6670200666F6F /* GifCell.h */,
+				B5A76A3D26F6670200666F6F /* GifCell.m */,
+				B5A76A3F26F6675200666F6F /* GifModel.h */,
+				B5A76A4026F6675200666F6F /* GifModel.m */,
+			);
+			path = GifView;
 			sourceTree = "<group>";
 		};
 		B5BA3D6A241F1E900006D465 /* GPUImage */ = {
@@ -1321,6 +1344,7 @@
 				B5BA3F3F241F1E920006D465 /* GPUImageView.m in Sources */,
 				B5BA3F11241F1E920006D465 /* GPUImageSkinToneFilter.m in Sources */,
 				B5BA3F21241F1E920006D465 /* GPUImage3x3TextureSamplingFilter.m in Sources */,
+				B5A76A4126F6675200666F6F /* GifModel.m in Sources */,
 				B5BA3F7B241F1E920006D465 /* GPUImageKuwaharaFilter.m in Sources */,
 				B5BA3F44241F1E920006D465 /* GPUImageSharpenFilter.m in Sources */,
 				B5BA3F3B241F1E920006D465 /* GPUImageMovieWriter.m in Sources */,
@@ -1389,6 +1413,7 @@
 				B5BA3F62241F1E920006D465 /* GPUImageHoughTransformLineDetector.m in Sources */,
 				B5BA3F01241F1E920006D465 /* GPUImageSketchFilter.m in Sources */,
 				B5BA3F26241F1E920006D465 /* GLProgram.m in Sources */,
+				B5A76A3B26F666D900666F6F /* GifSelectionView.m in Sources */,
 				B5BA3F1E241F1E920006D465 /* GPUImageCropFilter.m in Sources */,
 				B5BA3F1F241F1E920006D465 /* GPUImagePixellateFilter.m in Sources */,
 				B5BA3F7F241F1E920006D465 /* GPUImageLuminosityBlendFilter.m in Sources */,
@@ -1432,6 +1457,7 @@
 				B5BA3F4E241F1E920006D465 /* GPUImageColorConversion.m in Sources */,
 				B5BA3F37241F1E920006D465 /* GPUImageRGBFilter.m in Sources */,
 				B5BA3F8A241F1E920006D465 /* GPUImageLightenBlendFilter.m in Sources */,
+				B5A76A3E26F6670200666F6F /* GifCell.m in Sources */,
 				B54A9F652407A6E900290CAF /* WorkView.m in Sources */,
 				B5BA3F2A241F1E920006D465 /* GPUImageDivideBlendFilter.m in Sources */,
 				B54A9F442406A06F00290CAF /* AppDelegate.m in Sources */,

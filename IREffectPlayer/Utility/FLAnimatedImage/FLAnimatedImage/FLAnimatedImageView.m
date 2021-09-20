@@ -87,8 +87,26 @@
 - (void)commonInit
 {
     self.runLoopMode = [[self class] defaultRunLoopMode];
+    
+    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMove:)];
+    [panGesture setMinimumNumberOfTouches:1];
+    [panGesture setMaximumNumberOfTouches:2];
+//    [panGesture setDelegate:self];
+    [self addGestureRecognizer:panGesture];
 }
 
+- (void)handleMove:(UIPanGestureRecognizer *)gesture {
+    CGPoint translation = [gesture translationInView:[self superview]];
+    // Boundary detection
+    CGPoint targetPoint = CGPointMake(self.center.x + translation.x, self.center.y + translation.y);
+    targetPoint.x = MAX(0, targetPoint.x);
+    targetPoint.y = MAX(0, targetPoint.y);
+    targetPoint.x = MIN(self.superview.bounds.size.width, targetPoint.x);
+    targetPoint.y = MIN(self.superview.bounds.size.height, targetPoint.y);
+    
+    [self setCenter:targetPoint];
+    [gesture setTranslation:CGPointZero inView:[self superview]];
+}
 
 #pragma mark - Accessors
 #pragma mark Public
@@ -494,5 +512,17 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
     layer.contents = (__bridge id)self.image.CGImage;
 }
 
+#pragma mark - Hit Test
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    if (self.hidden || self.alpha < 0.01) {
+        return nil;
+    }
+    if ([self pointInside:[self convertPoint:point toView:self] withEvent:event]) {
+        return self;
+    }
+    // return nil for other area.
+    return nil;
+}
 
 @end

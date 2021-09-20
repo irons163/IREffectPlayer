@@ -61,79 +61,10 @@
             <point key="canvasLocation" x="-298" y="574"/>
         </scene>
         <!--Item-->
-        <scene sceneID="EpQ-me-yh8">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="UES-tm-I9L" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Yf4-3v-KNC" customClass="FilterSelectionView">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="pKQ-dI-lmW">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
-                                <color key="backgroundColor" red="0.80000000000000004" green="0.80000000000000004" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="uff-Kx-2XI">
-                                    <size key="itemSize" width="50" height="50"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="FilterCell" id="Dw2-dI-MGj" customClass="FilterCell">
-                                        <rect key="frame" x="8" y="8" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <view userInteractionEnabled="NO" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="8MV-3W-t0k">
-                                                    <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <subviews>
-                                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fQQ-ey-pxy">
-                                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                        </imageView>
-                                                    </subviews>
-                                                    <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                                </view>
-                                            </subviews>
-                                        </view>
-                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <connections>
-                                            <outlet property="imageView" destination="fQQ-ey-pxy" id="JAh-KM-Bux"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
-                                <connections>
-                                    <outlet property="dataSource" destination="Yf4-3v-KNC" id="pJG-Dn-Mgl"/>
-                                    <outlet property="delegate" destination="Yf4-3v-KNC" id="mxa-PO-F0q"/>
-                                </connections>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="aDX-6X-zO0"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="pKQ-dI-lmW" firstAttribute="leading" secondItem="Yf4-3v-KNC" secondAttribute="leading" id="87L-Kt-jiT"/>
-                            <constraint firstItem="pKQ-dI-lmW" firstAttribute="top" secondItem="Yf4-3v-KNC" secondAttribute="top" id="BKc-ka-ug4"/>
-                            <constraint firstAttribute="trailing" secondItem="pKQ-dI-lmW" secondAttribute="trailing" id="hDf-7o-yTn"/>
-                            <constraint firstAttribute="bottom" secondItem="pKQ-dI-lmW" secondAttribute="bottom" id="rbv-sW-1WC"/>
-                        </constraints>
-                        <connections>
-                            <outlet property="filterCollectionView" destination="pKQ-dI-lmW" id="2T3-Wa-igh"/>
-                        </connections>
-                    </view>
-                    <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="s4Z-uS-X50"/>
-                    <toolbarItems/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="CJP-tr-BNF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1969.5999999999999" y="-413.79310344827587"/>
-        </scene>
-        <!--Item-->
         <scene sceneID="Z6y-HD-RYr">
             <objects>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="csH-vd-9UJ" sceneMemberID="viewController">
-                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Hcu-d9-pha" customClass="FilterSelectionView">
+                    <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Hcu-d9-pha" customClass="GifSelectionView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -147,7 +78,7 @@
                                     <inset key="sectionInset" minX="8" minY="8" maxX="8" maxY="8"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StickerCell" id="qdS-6y-FZT" customClass="StickerCell">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="GifCell" id="qdS-6y-FZT" customClass="GifCell">
                                         <rect key="frame" x="8" y="8" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -187,20 +118,18 @@
                             <constraint firstItem="3dD-hS-w9i" firstAttribute="top" secondItem="Hcu-d9-pha" secondAttribute="top" id="fZy-p9-M4B"/>
                             <constraint firstItem="3dD-hS-w9i" firstAttribute="leading" secondItem="Hcu-d9-pha" secondAttribute="leading" id="tNy-oj-hvd"/>
                         </constraints>
-                        <connections>
-                            <outlet property="filterCollectionView" destination="3dD-hS-w9i" id="mTf-zb-8L9"/>
-                        </connections>
                     </view>
                     <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="0aB-DI-1Uq"/>
                     <toolbarItems/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="GL0-y7-QLm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1969.5999999999999" y="-193.4032983508246"/>
+            <point key="canvasLocation" x="2705" y="-85"/>
         </scene>
         <!--Item-->
         <scene sceneID="J9A-l8-V0r">
             <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="paQ-WK-czw" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <viewController automaticallyAdjustsScrollViewInsets="NO" id="oNq-Y0-AIX" sceneMemberID="viewController">
                     <view key="view" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="o24-mS-NZY" customClass="FilterSelectionView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
@@ -260,9 +189,8 @@
                     <tabBarItem key="tabBarItem" enabled="NO" title="Item" id="q3O-pZ-6UQ"/>
                     <toolbarItems/>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="paQ-WK-czw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1968.8" y="-615.29235382308855"/>
+            <point key="canvasLocation" x="2404" y="-651"/>
         </scene>
         <!--Item-->
         <scene sceneID="TYr-6K-dtC">
@@ -414,40 +342,32 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="Txw-5w-l3D">
                                                 <rect key="frame" x="20" y="20" width="335" height="33"/>
                                                 <subviews>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="YDn-gj-Q8z">
-                                                        <rect key="frame" x="0.0" y="0.0" width="63" height="33"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <state key="normal" title="Face"/>
-                                                        <connections>
-                                                            <action selector="faceModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="txl-e3-1q7"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JyH-Yb-oJc">
-                                                        <rect key="frame" x="68" y="0.0" width="63" height="33"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <state key="normal" title="Effect"/>
-                                                        <connections>
-                                                            <action selector="effectModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="yVh-ze-bXW"/>
-                                                        </connections>
-                                                    </button>
-                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQK-lU-uAe">
-                                                        <rect key="frame" x="136" y="0.0" width="63" height="33"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                        <state key="normal" title="Filter"/>
-                                                        <connections>
-                                                            <action selector="filterModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="ZKO-Pw-Ww3"/>
-                                                        </connections>
-                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9CH-PR-a5M">
-                                                        <rect key="frame" x="204" y="0.0" width="63" height="33"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="80" height="33"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <state key="normal" title="Sticker"/>
                                                         <connections>
                                                             <action selector="stickerModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="KZr-mQ-EOa"/>
                                                         </connections>
                                                     </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JyH-Yb-oJc">
+                                                        <rect key="frame" x="85" y="0.0" width="80" height="33"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <state key="normal" title="Gif"/>
+                                                        <connections>
+                                                            <action selector="gifModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="GNi-Ap-2rd"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aQK-lU-uAe">
+                                                        <rect key="frame" x="170" y="0.0" width="80" height="33"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <state key="normal" title="Filter"/>
+                                                        <connections>
+                                                            <action selector="filterModeClick:" destination="fB0-xD-axB" eventType="touchUpInside" id="ZKO-Pw-Ww3"/>
+                                                        </connections>
+                                                    </button>
                                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FPE-Rt-Z0H">
-                                                        <rect key="frame" x="272" y="0.0" width="63" height="33"/>
+                                                        <rect key="frame" x="255" y="0.0" width="80" height="33"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <state key="normal" title="Edit"/>
                                                         <connections>
@@ -528,10 +448,8 @@
                     </view>
                     <connections>
                         <outlet property="editModeButton" destination="FPE-Rt-Z0H" id="yPk-s1-7xm"/>
-                        <outlet property="effectModeButton" destination="JyH-Yb-oJc" id="ofn-EC-DY5"/>
-                        <outlet property="effectiveButton" destination="f3y-b1-4eU" id="tfK-FK-eoH"/>
-                        <outlet property="faceModeButton" destination="YDn-gj-Q8z" id="E2U-fz-5Bm"/>
                         <outlet property="filterModeButton" destination="aQK-lU-uAe" id="Eax-ef-eKc"/>
+                        <outlet property="gifModeButton" destination="JyH-Yb-oJc" id="QLv-bB-ajG"/>
                         <outlet property="mainView" destination="RX3-JQ-sBE" id="19R-Mk-cfB"/>
                         <outlet property="stickerModeButton" destination="9CH-PR-a5M" id="Szv-CJ-bLQ"/>
                         <outlet property="stickerSelectionBoard" destination="AId-F0-udt" id="IxV-8t-5bC"/>
@@ -552,10 +470,9 @@
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>
                     <connections>
-                        <segue destination="oNq-Y0-AIX" kind="relationship" relationship="viewControllers" id="Vad-uX-EXx"/>
-                        <segue destination="UES-tm-I9L" kind="relationship" relationship="viewControllers" id="pGc-jf-4rA"/>
-                        <segue destination="csH-vd-9UJ" kind="relationship" relationship="viewControllers" id="IJh-jb-9QD"/>
-                        <segue destination="d7Y-EA-Uus" kind="relationship" relationship="viewControllers" id="27u-Rg-cbz"/>
+                        <segue destination="d7Y-EA-Uus" kind="relationship" relationship="viewControllers" id="iaD-fI-Cw5"/>
+                        <segue destination="csH-vd-9UJ" kind="relationship" relationship="viewControllers" id="eii-C3-tmq"/>
+                        <segue destination="oNq-Y0-AIX" kind="relationship" relationship="viewControllers" id="RVQ-CT-rgh"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="exE-CL-3Q0" userLabel="First Responder" sceneMemberID="firstResponder"/>

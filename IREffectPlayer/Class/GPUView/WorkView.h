@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 @class Sticker;
+@class GifModel;
 @protocol WorkViewDelegate;
 
 @interface WorkView : UIView
@@ -21,6 +22,9 @@
 
 - (void)clearStickers;
 - (void)addSticker:(Sticker *)sticker;
+- (void)addGifModel:(GifModel *)gifModel;
+
+- (void)nextFrameIndexForInterval:(NSTimeInterval)interval;
 
 - (void)generateWithBlock:(void(^)(UIImage *finalImage, NSError *error))block;
 
