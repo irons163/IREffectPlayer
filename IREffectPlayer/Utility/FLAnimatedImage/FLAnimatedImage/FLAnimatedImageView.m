@@ -88,11 +88,11 @@
 {
     self.runLoopMode = [[self class] defaultRunLoopMode];
     
-    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMove:)];
-    [panGesture setMinimumNumberOfTouches:1];
-    [panGesture setMaximumNumberOfTouches:2];
+//    UIPanGestureRecognizer *panGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleMove:)];
+//    [panGesture setMinimumNumberOfTouches:1];
+//    [panGesture setMaximumNumberOfTouches:2];
 //    [panGesture setDelegate:self];
-    [self addGestureRecognizer:panGesture];
+//    [self addGestureRecognizer:panGesture];
 }
 
 - (void)handleMove:(UIPanGestureRecognizer *)gesture {
@@ -514,15 +514,15 @@ static NSUInteger gcd(NSUInteger a, NSUInteger b)
 
 #pragma mark - Hit Test
 
-- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    if (self.hidden || self.alpha < 0.01) {
-        return nil;
-    }
-    if ([self pointInside:[self convertPoint:point toView:self] withEvent:event]) {
-        return self;
-    }
-    // return nil for other area.
-    return nil;
-}
+//- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+//    if (self.hidden || self.alpha < 0.01) {
+//        return nil;
+//    }
+//    if ([self pointInside:[self convertPoint:point toView:self] withEvent:event]) {
+//        return self;
+//    }
+//    // return nil for other area.
+//    return nil;
+//}
 
 @end

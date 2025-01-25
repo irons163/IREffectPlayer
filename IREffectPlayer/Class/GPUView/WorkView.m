@@ -83,14 +83,21 @@
     [gifImageView setAnimatedImage:gifModel.image];
     gifImageView.backgroundColor = [UIColor clearColor];
     [gifImageView startAnimating];
-    [self.stickerViewArray addObject:gifImageView];
-    [self addSubview:gifImageView];
+    
+    IRStickerView *newStickerView = [[IRStickerView alloc] initWithContentFrame:CGRectMake(0, 0, gifModel.image.size.width, gifModel.image.size.height) contentImageView:gifImageView];
+    newStickerView.delegate = self;
+    [self.stickerViewArray addObject:newStickerView];
+    [self addSubview:newStickerView];
 }
 
 - (void)nextFrameIndexForInterval:(NSTimeInterval)interval {
     for (UIView *v in self.subviews) {
-        if ([v isKindOfClass:FLAnimatedImageView.class]) {
-            FLAnimatedImageView *gifImageView = v;
+//        if ([v isKindOfClass:FLAnimatedImageView.class]) {
+//            FLAnimatedImageView *gifImageView = v;
+//            [gifImageView nextFrameIndexForInterval:interval];
+//        }
+        if ([v isKindOfClass:IRStickerView.class] && [((IRStickerView*)v).contentView isKindOfClass:FLAnimatedImageView.class]) {
+            FLAnimatedImageView *gifImageView = ((IRStickerView*)v).contentView;
             [gifImageView nextFrameIndexForInterval:interval];
         }
     }
@@ -128,7 +135,7 @@
 
 #pragma mark - Sticker view delegte
 
--(void)stickerViewDidTapContentView:(IRStickerView *)sticker {
+- (void)ir_StickerViewDidTapContentView:(IRStickerView *)sticker {
     for (IRStickerView *stickerView in self.stickerViewArray){
         if (stickerView == sticker){
             continue;
@@ -150,42 +157,9 @@
     }
 }
 
-//- (void)stickerViewDidBeginEditing:(StickerView *)sticker{
-//    for (StickerView *stickerView in self.stickerViewArray){
-//        if (stickerView == sticker){
-//            continue;
-//        }
-//        [stickerView setEnabledControl:NO];
-//        [stickerView setEnabledBorder:NO];
-//    }
-//}
-
--(void)stickerViewDidEndEditing:(IRStickerView *)stickerView{
-    [stickerView setEnabledControl:NO];
-    [stickerView setEnabledBorder:NO];
-    
-    if ([self.delegate respondsToSelector:@selector(hideEditingHandles:)])
-    {
-        [self.delegate hideEditingHandles:stickerView];
-    }
-}
-
-//-(void)stickerViewDidCancelEditing:(StickerView *)stickerView{
-//    [stickerView setEnabledControl:NO];
-//    [stickerView setEnabledBorder:NO];
-//}
-
 - (void)stickerViewDidClose:(IRStickerView *)sticker {
     [self.stickerViewArray removeObject:sticker];
 }
-
-//#pragma mark - touch
-//
-//- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
-//    for (StickerView *stickerView in self.stickerViewArray){
-//        [stickerView setEnabledControl:NO];
-//    }
-//}
 
 #pragma mark - generate
 
