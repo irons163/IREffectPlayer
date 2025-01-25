@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface IRStickerView : UIView
 
+@property (strong, nonatomic, readonly) UIImageView *contentView;
+
 @property (assign, nonatomic) BOOL enabledControl; // determine the control view is shown or not, default is YES
 @property (assign, nonatomic) BOOL enabledShakeAnimation; // default is YES
 @property (assign, nonatomic) BOOL enabledBorder; // default is YES
@@ -22,6 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (assign, nonatomic) id<IRStickerViewDelegate> delegate;
 
 - (instancetype)initWithContentFrame:(CGRect)frame contentImage:(UIImage *)contentImage;
+- (instancetype)initWithContentFrame:(CGRect)frame contentImageView:(UIImageView *)contentImageView;
 
 - (void)performTapOperation;
 

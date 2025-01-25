@@ -18,7 +18,7 @@
 
 @interface IRStickerView () <UIGestureRecognizerDelegate>
 
-@property (strong, nonatomic) UIImageView *contentView;
+@property (strong, nonatomic, readwrite) UIImageView *contentView;
 
 @property (strong, nonatomic) UIImageView *leftTopControl;
 @property (strong, nonatomic) UIImageView *rightTopControl;
@@ -43,6 +43,36 @@
     if (self) {
         self.contentView = [[UIImageView alloc] initWithFrame:CGRectMake(kStickerHalfControlViewSize, kStickerHalfControlViewSize, frame.size.width, frame.size.height)];
         self.contentImage = contentImage;
+        [self addSubview:self.contentView];
+        
+        self.rightBottomControl = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.center.x + self.contentView.bounds.size.width / 2 - kStickerHalfControlViewSize, self.contentView.center.y + self.contentView.bounds.size.height / 2 - kStickerHalfControlViewSize, kStickerControlViewSize, kStickerControlViewSize)];
+        self.rightBottomControl.image = [UIImage imageNamedForCurrentBundle:@"IRSticker.bundle/btn_resize.png"];
+        [self addSubview:self.rightBottomControl];
+        
+        self.leftTopControl = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.center.x - self.contentView.bounds.size.width / 2 - kStickerHalfControlViewSize, self.contentView.center.y - self.contentView.bounds.size.height / 2 - kStickerHalfControlViewSize, kStickerControlViewSize, kStickerControlViewSize)];
+        self.leftTopControl.image = [UIImage imageNamedForCurrentBundle:@"IRSticker.bundle/btn_delete.png"];
+        [self addSubview:self.leftTopControl];
+        
+        self.rightTopControl = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.center.x + self.contentView.bounds.size.width / 2 - kStickerHalfControlViewSize, self.contentView.center.y - self.contentView.bounds.size.height / 2 - kStickerHalfControlViewSize, kStickerControlViewSize, kStickerControlViewSize)];
+        self.rightTopControl.image = [UIImage imageNamedForCurrentBundle:@"IRSticker.bundle/btn_smile.png"];
+        [self addSubview:self.rightTopControl];
+        
+        self.leftBottomControl = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.center.x - self.contentView.bounds.size.width / 2 - kStickerHalfControlViewSize, self.contentView.center.y + self.contentView.bounds.size.height / 2 - kStickerHalfControlViewSize, kStickerControlViewSize, kStickerControlViewSize)];
+        self.leftBottomControl.image = [UIImage imageNamedForCurrentBundle:@"IRSticker.bundle/btn_flip.png"];
+        [self addSubview:self.leftBottomControl];
+        
+        [self initShapeLayer];
+        [self setupConfig];
+        [self attachGestures];
+    }
+    return self;
+}
+
+- (instancetype)initWithContentFrame:(CGRect)frame contentImageView:(UIImageView *)contentImageView {
+    self = [super initWithFrame:CGRectMake(frame.origin.x - kStickerHalfControlViewSize, frame.origin.y - kStickerHalfControlViewSize, frame.size.width + kStickerControlViewSize, frame.size.height + kStickerControlViewSize)];
+    if (self) {
+        self.contentView = contentImageView;
+//        self.contentImage = contentImage;
         [self addSubview:self.contentView];
         
         self.rightBottomControl = [[UIImageView alloc] initWithFrame:CGRectMake(self.contentView.center.x + self.contentView.bounds.size.width / 2 - kStickerHalfControlViewSize, self.contentView.center.y + self.contentView.bounds.size.height / 2 - kStickerHalfControlViewSize, kStickerControlViewSize, kStickerControlViewSize)];

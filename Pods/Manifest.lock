@@ -1,8 +1,8 @@
 PODS:
-  - IRFFMpeg (4.2.19):
-    - IRFFMpeg/FFMpegLib (= 4.2.19)
-  - IRFFMpeg/FFMpegLib (4.2.19)
-  - IRPlayer (0.3.6):
+  - IRFFMpeg (4.2.20):
+    - IRFFMpeg/FFMpegLib (= 4.2.20)
+  - IRFFMpeg/FFMpegLib (4.2.20)
+  - IRPlayer (0.3.7):
     - IRFFMpeg
   - IRSticker (0.1.0)
 
@@ -17,10 +17,10 @@ SPEC REPOS:
     - IRSticker
 
 SPEC CHECKSUMS:
-  IRFFMpeg: 50e159994f9c7c1136b19fc1dea96b4c903b1c9c
-  IRPlayer: 32858915f98b76c9bcd3dddc55f9d745426b71ec
+  IRFFMpeg: 274fab0ef624306e1bd6b40f12c20df75312d1e4
+  IRPlayer: 4e1ac0b3c5e0d10f363b84ce083cc347ea055277
   IRSticker: c14ebee8b0108e97d81fccfbd7076d5564c5f8d4
 
 PODFILE CHECKSUM: 7790c1cbd141e1908aba2c4e7966d8eba32b060b
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.16.2

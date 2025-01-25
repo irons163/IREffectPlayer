@@ -8,6 +8,7 @@ LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/IRFFMpeg/lib"
 OTHER_LDFLAGS = $(inherited) -all_load -l"avcodec" -l"avdevice" -l"avfilter" -l"avformat" -l"avutil" -l"bz2" -l"iconv" -l"lzma" -l"swresample" -l"swscale" -l"z" -framework "AVFoundation" -framework "AudioToolbox" -framework "CoreMedia" -framework "Foundation" -framework "UIKit" -framework "VideoToolbox"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_DEVELOPMENT_LANGUAGE = ${DEVELOPMENT_LANGUAGE}
 PODS_ROOT = ${SRCROOT}
 PODS_TARGET_SRCROOT = ${PODS_ROOT}/IRFFMpeg
 PODS_XCFRAMEWORKS_BUILD_DIR = $(PODS_CONFIGURATION_BUILD_DIR)/XCFrameworkIntermediates

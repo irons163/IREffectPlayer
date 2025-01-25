@@ -6,6 +6,7 @@ HEADER_SEARCH_PATHS = $(inherited) "${PODS_CONFIGURATION_BUILD_DIR}/IRFFMpeg/IRF
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
 LIBRARY_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/IRFFMpeg/lib"
 OTHER_LDFLAGS = $(inherited) -ObjC -l"bz2" -l"iconv" -l"lzma" -l"z" -framework "AVFoundation" -framework "AudioToolbox" -framework "CoreMedia" -framework "Foundation" -framework "IRFFMpeg" -framework "IRPlayer" -framework "IRSticker" -framework "UIKit" -framework "VideoToolbox"
+OTHER_MODULE_VERIFIER_FLAGS = $(inherited) "-F${PODS_CONFIGURATION_BUILD_DIR}/IRFFMpeg" "-F${PODS_CONFIGURATION_BUILD_DIR}/IRPlayer" "-F${PODS_CONFIGURATION_BUILD_DIR}/IRSticker"
 PODS_BUILD_DIR = ${BUILD_DIR}
 PODS_CONFIGURATION_BUILD_DIR = ${PODS_BUILD_DIR}/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
 PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
