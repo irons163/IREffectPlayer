@@ -54,11 +54,19 @@
 
 - (CGSize)layerSizeInPixels;
 {
+    CGSize pointSize = layer.bounds.size;
+//    return CGSizeMake(layer.contentsScale * pointSize.width * 3.5, layer.contentsScale * pointSize.height / 4);
+//    return CGSizeMake(layer.contentsScale * pointSize.width * (16.0/9.0), layer.contentsScale * pointSize.height * (9.0/16.0));
+//    return CGSizeMake(layer.contentsScale * pointSize.width * ([UIScreen mainScreen].bounds.size.height/[UIScreen mainScreen].bounds.size.width), layer.contentsScale * pointSize.height * ([UIScreen mainScreen].bounds.size.width/[UIScreen mainScreen].bounds.size.height));
+    return CGSizeMake(layer.contentsScale * pointSize.width * (1206/640.0), layer.contentsScale * pointSize.height * (640.0/1206));
+//    return CGSizeMake(layer.contentsScale * pointSize.width * (640.0/336.0), layer.contentsScale * pointSize.height * (336.0/640.0));
+//    return CGSizeMake(layer.contentsScale * pointSize.width / [[UIScreen mainScreen] scale], layer.contentsScale * pointSize.height / [[UIScreen mainScreen] scale]);
 //    CGSize pointSize = layer.bounds.size;
 //    return CGSizeMake(layer.contentsScale * pointSize.width, layer.contentsScale * pointSize.height);
 //    return CGSizeMake((NSInteger)(layer.contentsScale * pointSize.width / [[UIScreen mainScreen] scale]) + 1, (NSInteger)(layer.contentsScale * pointSize.height / [[UIScreen mainScreen] scale]) + 1);
 //    return CGSizeMake((NSInteger)(layer.contentsScale * pointSize.width / [[UIScreen mainScreen] scale]) + 1, (NSInteger)(layer.contentsScale * pointSize.height / [[UIScreen mainScreen] scale]));
 //    return CGSizeMake(208, (NSInteger)(layer.contentsScale * pointSize.height / [[UIScreen mainScreen] scale]));
+/*
     NSInteger width = layer.bounds.size.width;
     if (width % 2 != 0) {
         width += 1;
@@ -69,6 +77,7 @@
     }
     
     return CGSizeMake(width * [[UIScreen mainScreen] scale], height * [[UIScreen mainScreen] scale]);
+ */
 //    return CGSizeMake(828 + 4, 1334);
 //    return CGSizeMake(414 + 2, 1334);
 //    return CGSizeMake(384, 502);
@@ -176,8 +185,9 @@
 //        CGContextScaleCTM(imageContext, layer.contentsScale, -layer.contentsScale);
          CGContextTranslateCTM(imageContext, 0.0f, 0);
 //         CGContextScaleCTM(imageContext, layer.contentsScale, layer.contentsScale);
+//         CGContextScaleCTM(imageContext, [UIScreen mainScreen].scale, 1);
          CGContextScaleCTM(imageContext, [UIScreen mainScreen].scale, [UIScreen mainScreen].scale);
-         
+
          void (^yourBlock)(void) = ^(void) {
 //             UIGraphicsPushContext(imageContext); {
 //                 CGRect containerRect = [layer bounds];

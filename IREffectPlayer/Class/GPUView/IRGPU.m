@@ -193,7 +193,8 @@ static GLfloat imageVertices[8];
     
     NSDate *startTime = [NSDate date];
     
-    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+//    self.temp = [[WorkView alloc] initWithFrame:self.irOutput.viewprotRange];
+    self.temp = [[WorkView alloc] initWithFrame:self.frame];
     UILabel *timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0, 0.0, 150.0f, 40.0f)];
     timeLabel.font = [UIFont systemFontOfSize:17.0f];
     timeLabel.text = @"Time: 0.0 s";
@@ -209,7 +210,7 @@ static GLfloat imageVertices[8];
     blendFilter.mix = 1.0;
     
     UIImageView *imageView= [[UIImageView alloc] initWithFrame:CGRectMake(100.0, 100.0, 40.0f, 40.0f)];
-    imageView.image = [UIImage imageNamed:@"Icon"];
+    imageView.image = [UIImage imageNamed:@"haha"];
     imageView.backgroundColor = [UIColor clearColor];
     [self.temp addSubview:imageView];
     

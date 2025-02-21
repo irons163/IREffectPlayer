@@ -98,7 +98,11 @@
     }];
     self.player.decoder = [IRPlayerDecoder FFmpegDecoder];
     [self.mainView insertSubview:self.player.view atIndex:0];
+//    IRGLRenderMode2D *mode = [[IRGLRenderMode2D alloc] init];
+//    mode.aspect = 16.0/9.0;
+
     [self.player replaceVideoWithURL:normalVideo];
+//    self.player.renderModes = @[mode];
     //    IRGPUPreview *i = [[IRGPUPreview alloc] initWithFrame:CGRectMake(0, 0, self.player.view.bounds.size.width/2, self.player.view.bounds.size.height/2)];
     //
     //    [(IRGPU *)self.player.view setOutput:i];
